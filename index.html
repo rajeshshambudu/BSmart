@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rajesh Store | Cloud, Engineering & Beats</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
             --bg: #0b0f1a;
@@ -13,7 +16,9 @@
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
-            --nav-bg: #131921; /* Amazon Dark Navy */
+            --nav-bg: #131921;
+            --amazon-gold: #ffd814;
+            --amazon-orange: #ffa41c;
         }
 
         body.light-mode {
@@ -25,7 +30,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); transition: 0.3s; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); transition: 0.3s; overflow-x: hidden; }
 
         /* --- NAVIGATION --- */
         nav {
@@ -39,40 +44,55 @@
             z-index: 1000;
         }
         .logo { font-weight: 800; color: white; text-decoration: none; font-size: 1.5rem; }
+        .logo span { color: var(--amazon-orange); }
+        
         .search-container { flex-grow: 1; display: flex; }
         .search-container input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 4px 0 0 4px;
             outline: none;
         }
         .search-btn {
-            background: #febd69;
+            background: var(--amazon-orange);
             border: none;
             padding: 10px 20px;
             border-radius: 0 4px 4px 0;
             cursor: pointer;
+        }
+
+        .nav-tools { display: flex; gap: 20px; align-items: center; color: white; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.4rem; }
+        .cart-count {
+            position: absolute;
+            top: -10px; right: -10px;
+            background: #f08804;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-size: 12px;
             font-weight: bold;
         }
-        .nav-tools { display: flex; gap: 15px; align-items: center; color: white; }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO --- */
         .hero {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7), var(--bg)), 
+            background: linear-gradient(to bottom, rgba(11, 15, 26, 0.8), var(--bg)), 
                         url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
-            height: 300px;
+            height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 20px;
         }
-        #typing-text { color: var(--accent); font-weight: bold; min-height: 1.2em; border-right: 2px solid var(--accent); }
+        .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 10px; }
+        #typing-text { color: var(--accent); font-size: 1.2rem; font-weight: 600; border-right: 2px solid var(--accent); padding-right: 5px; }
 
         /* --- PRODUCT GRID --- */
-        .container { max-width: 1300px; margin: -50px auto 0; padding: 0 20px; }
+        .container { max-width: 1300px; margin: -60px auto 50px; padding: 0 20px; }
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -81,28 +101,53 @@
         .product-card {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid var(--border);
             transition: 0.3s;
-            position: relative;
+            display: flex;
+            flex-direction: column;
         }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
-        .price { font-size: 1.5rem; font-weight: 800; margin: 10px 0; }
-        .btn-add {
-            background: #ffd814;
-            border: 1px solid #fcd200;
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.2); }
+        .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        
+        .star-rating { color: #ffa41c; font-size: 0.9rem; margin-bottom: 10px; }
+        .star-rating span { color: var(--text-dim); margin-left: 5px; font-size: 0.8rem; }
+        
+        .price { font-size: 1.6rem; font-weight: 800; margin-bottom: 15px; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: auto; }
+        .btn-add { background: var(--amazon-gold); flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #fcd200; cursor: pointer; font-weight: 600; }
+        .btn-buy { background: var(--amazon-orange); flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #e67e22; cursor: pointer; font-weight: 600; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
             border-radius: 20px;
-            padding: 8px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
+            border: 1px solid var(--border);
         }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-btn { background: none; border: none; color: var(--text-main); font-size: 1.5rem; cursor: pointer; }
 
-        /* --- CART WIDGET --- */
-        .cart-count { background: #f08804; color: white; padding: 2px 6px; border-radius: 50%; font-size: 12px; }
+        #noResults { display: none; text-align: center; grid-column: 1 / -1; padding: 50px; }
 
-        @keyframes blink { 50% { border-color: transparent; } }
+        @media (max-width: 768px) {
+            nav { padding: 10px; flex-wrap: wrap; }
+            .search-container { order: 3; width: 100%; }
+            .hero h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
@@ -110,88 +155,188 @@
 <nav>
     <a href="#" class="logo">RAJESH<span>.com</span></a>
     <div class="search-container">
-        <input type="text" placeholder="Search Cloud Solutions, Engineering Tools, or Beats...">
-        <button class="search-btn">🔍</button>
+        <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search Cloud, Engineering, or Beats...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
     </div>
     <div class="nav-tools">
-        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:20px;">🌓</button>
-        <div>Returns <br><strong>& Orders</strong></div>
-        <div style="cursor:pointer">🛒 <span class="cart-count" id="cart-qty">0</span></div>
+        <button onclick="toggleTheme()" style="background:none; border:none; color:white; cursor:pointer; font-size:1.2rem;"><i class="fas fa-moon"></i></button>
+        <div class="cart-icon" onclick="toggleCartModal()">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cart-qty">0</span>
+        </div>
     </div>
 </nav>
 
 <div class="hero">
-    <h1 class="fade-in">Experience Precision</h1>
+    <h1>Professional Solutions</h1>
     <div id="typing-text"></div>
 </div>
 
 <div class="container">
-    <div class="product-grid">
+    <div class="product-grid" id="productGrid">
         <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&w=400&q=80" alt="Azure Setup">
-            <h3>Cloud Infrastructure Setup</h3>
-            <p style="color:var(--text-dim)">Professional Azure DevOps CI/CD pipeline configuration.</p>
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&w=400&q=80" alt="Azure">
+            <h3>Azure DevOps Pipeline</h3>
+            <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:10px;">Automated CI/CD with C# integration.</p>
+            <div class="star-rating">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                <span>(1,240)</span>
+            </div>
             <div class="price">$499.00</div>
-            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+            <div class="btn-group">
+                <button class="btn-add" onclick="addToCart('Azure DevOps', 499)">Cart</button>
+                <button class="btn-buy" onclick="buyNow('Azure DevOps Pipeline')">Buy Now</button>
+            </div>
         </div>
 
         <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&w=400&q=80" alt="Engineering">
-            <h3>Structural Analysis Tool</h3>
-            <p style="color:var(--text-dim)">Advanced IS 456 RCC Design Spreadsheet Pro.</p>
+            <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&w=400&q=80" alt="Civil">
+            <h3>IS 456 Design Engine</h3>
+            <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:10px;">RCC Beam Validator & BOQ Generator.</p>
+            <div class="star-rating">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <span>(856)</span>
+            </div>
             <div class="price">$89.00</div>
-            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+            <div class="btn-group">
+                <button class="btn-add" onclick="addToCart('Design Engine', 89)">Cart</button>
+                <button class="btn-buy" onclick="buyNow('IS 456 Design Engine')">Buy Now</button>
+            </div>
         </div>
 
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=400&q=80" alt="Music">
             <h3>Exclusive Beat Pack</h3>
-            <p style="color:var(--text-dim)">10 High-fidelity FL Studio hip-hop instrumentals.</p>
+            <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:10px;">10 FL Studio Drill & Trap Instrumentals.</p>
+            <div class="star-rating">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                <span>(432)</span>
+            </div>
             <div class="price">$120.00</div>
-            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+            <div class="btn-group">
+                <button class="btn-add" onclick="addToCart('Beat Pack', 120)">Cart</button>
+                <button class="btn-buy" onclick="buyNow('Exclusive Beat Pack')">Buy Now</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="noResults">
+        <i class="fas fa-search" style="font-size: 3rem; color: var(--text-dim);"></i>
+        <p style="margin-top:10px;">No matching products found.</p>
+    </div>
+</div>
+
+<div id="checkoutModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Your Cart</h2>
+            <button onclick="toggleCartModal()" class="close-btn">&times;</button>
+        </div>
+        <div id="cartItemsList"></div>
+        <div style="border-top:1px solid var(--border); margin-top:20px; padding-top:20px;">
+            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.2rem;">
+                <span>Total:</span>
+                <span id="totalAmount">$0.00</span>
+            </div>
+            <button class="btn-buy" style="width:100%; margin-top:20px;" onclick="processCheckout()">Complete Checkout</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Theme Toggle
+    // 1. THEME TOGGLE
     function toggleTheme() {
         document.body.classList.toggle('light-mode');
+        const icon = document.querySelector('.nav-tools i');
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
     }
 
-    // Typing Animation
+    // 2. TYPING ANIMATION
     const textElement = document.getElementById("typing-text");
-    const phrases = ["Deploying Cloud Solutions...", "Designing Safe Structures...", "Producing Modern Beats..."];
+    const phrases = ["Building Scalable Infrastructure", "Designing Civil Marvels", "Composing Soulful Beats"];
     let pIdx = 0, cIdx = 0, isDeleting = false;
 
     function typeEffect() {
         let current = phrases[pIdx];
-        if (isDeleting) {
-            textElement.textContent = current.substring(0, cIdx - 1);
-            cIdx--;
-        } else {
-            textElement.textContent = current.substring(0, cIdx + 1);
-            cIdx++;
-        }
-
-        if (!isDeleting && cIdx === current.length) {
+        textElement.textContent = isDeleting ? current.substring(0, cIdx--) : current.substring(0, cIdx++);
+        
+        if (!isDeleting && cIdx > current.length) {
             isDeleting = true;
             setTimeout(typeEffect, 2000);
-        } else if (isDeleting && cIdx === 0) {
+        } else if (isDeleting && cIdx < 0) {
             isDeleting = false;
             pIdx = (pIdx + 1) % phrases.length;
+            cIdx = 0;
             setTimeout(typeEffect, 500);
         } else {
             setTimeout(typeEffect, isDeleting ? 50 : 100);
         }
     }
 
-    // Cart Logic
-    let count = 0;
-    function addToCart() {
-        count++;
-        document.getElementById('cart-qty').innerText = count;
-        alert("Item added to your Rajesh Store cart!");
+    // 3. SEARCH FILTER
+    function filterProducts() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.getElementsByClassName('product-card');
+        let found = 0;
+
+        for (let card of cards) {
+            const text = card.innerText.toLowerCase();
+            if (text.includes(input)) {
+                card.style.display = "flex";
+                found++;
+            } else {
+                card.style.display = "none";
+            }
+        }
+        document.getElementById('noResults').style.display = found === 0 ? "block" : "none";
+    }
+
+    // 4. CART LOGIC
+    let cart = [];
+    function addToCart(name, price) {
+        cart.push({ name, price });
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        document.getElementById('cart-qty').innerText = cart.length;
+        const list = document.getElementById('cartItemsList');
+        const totalDisp = document.getElementById('totalAmount');
+        
+        if (cart.length === 0) {
+            list.innerHTML = "<p>Your cart is empty.</p>";
+            totalDisp.innerText = "$0.00";
+            return;
+        }
+
+        let total = 0;
+        list.innerHTML = cart.map((item, i) => {
+            total += item.price;
+            return `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>${item.name}</span>
+                <strong>$${item.price}</strong>
+            </div>`;
+        }).join('');
+        totalDisp.innerText = `$${total.toFixed(2)}`;
+    }
+
+    function toggleCartModal() {
+        const m = document.getElementById('checkoutModal');
+        m.style.display = m.style.display === "flex" ? "none" : "flex";
+    }
+
+    // 5. EXTERNAL LINKS
+    function buyNow(name) {
+        const msg = encodeURIComponent(`I want to buy: ${name}`);
+        window.open(`https://wa.me/919000000000?text=${msg}`, '_blank');
+    }
+
+    function processCheckout() {
+        alert("Redirecting to secure payment...");
+        cart = [];
+        updateCartUI();
+        toggleCartModal();
     }
 
     document.addEventListener("DOMContentLoaded", typeEffect);

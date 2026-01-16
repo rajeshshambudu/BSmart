@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BSmart | SuperApp</title>
+<title>BSmart | SuperApp Elite</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
@@ -11,112 +11,142 @@
   --bg:#0f172a;--card-bg:#1e293b;--accent:#38bdf8;--text-main:#f1f5f9;
   --text-dim:#94a3b8;--border:rgba(255,255,255,0.1);--nav-bg:#020617;
   --btn-grad:linear-gradient(135deg,#38bdf8 0%,#0ea5e9 100%);
-  --danger: #ef4444; --success: #22c55e;
+  --danger: #ef4444; --success: #22c55e; --star: #f59e0b;
 }
 *{margin:0;padding:0;box-sizing:border-box;outline:none;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-main);line-height:1.6;padding-bottom:80px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-main);line-height:1.6;padding-bottom:100px;}
+
+/* Navigation */
 nav{background:var(--nav-bg);padding:15px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000;border-bottom:1px solid var(--border);}
 .logo{font-weight:800;font-size:1.6rem;color:white;text-decoration:none;}
 .logo span{color:var(--accent);}
+
 .sub-nav{background:#1e293b;padding:12px 5%;display:flex;align-items:center;gap:15px;overflow-x:auto;position:sticky;top:65px;z-index:999;}
 .search-container{flex-grow:1;max-width:400px;display:flex;position:relative;}
 .search-container input{width:100%;padding:10px 45px 10px 15px;border-radius:25px;border:none;background:#334155;color:white;}
 .voice-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--accent);cursor:pointer;}
-.cat-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:8px 18px;border-radius:20px;cursor:pointer;white-space:nowrap;font-size:0.8rem;display:flex;align-items:center;gap:8px;}
+
+.cat-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:8px 18px;border-radius:20px;cursor:pointer;white-space:nowrap;font-size:0.8rem;}
 .cat-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(56,189,248,0.1);}
+
+/* Product Grid */
 .container{max-width:1200px;margin:30px auto;padding:0 20px;}
 .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:25px;}
-.product-card{background:var(--card-bg);padding:20px;border-radius:20px;border:1px solid var(--border);transition:0.3s;position:relative;display:flex;flex-direction:column; cursor: pointer;}
+.product-card{background:var(--card-bg);padding:20px;border-radius:20px;border:1px solid var(--border);transition:0.3s;display:flex;flex-direction:column; cursor: pointer;}
 .product-card:hover{border-color: var(--accent); transform: translateY(-5px);}
 .product-card img{width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:15px;}
-.badge{position:absolute;top:10px;right:10px;background:var(--accent);color:#000;padding:3px 8px;border-radius:4px;font-size:0.65rem;font-weight:800;}
+
+.rating{color: var(--star); font-size: 0.8rem; margin-bottom: 5px;}
+.price{font-size: 1.4rem; font-weight: 800; color: var(--accent);}
 .stock-tag{font-size: 0.7rem; font-weight: 600; margin-bottom: 5px;}
 .low-stock{color: var(--danger);}
 .in-stock{color: var(--success);}
-.price{font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 5px;}
-.emi-text{margin-bottom:12px;font-size:0.8rem;color:var(--text-dim);}
-.btn-buy{background:var(--btn-grad);border:none;color:white;width:100%;padding:12px;border-radius:12px;cursor:pointer;font-weight:600;transition: 0.2s;}
-.btn-buy:disabled{background: #475569; cursor: not-allowed; opacity: 0.6;}
+
+.btn-buy{background:var(--btn-grad);border:none;color:white;width:100%;padding:12px;border-radius:12px;cursor:pointer;font-weight:600;margin-top:auto;}
+
+/* Modals */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:5000;backdrop-filter:blur(8px);}
-.modal-content{background:var(--card-bg);width:90%;max-width:450px;padding:30px;border-radius:20px;position:relative;max-height: 90vh; overflow-y: auto;}
+.modal-content{background:var(--card-bg);width:90%;max-width:450px;padding:30px;border-radius:20px;max-height: 85vh; overflow-y: auto;}
+
+/* Floating Support */
+.support-btn {position: fixed; bottom: 90px; right: 20px; background: #25d366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 3000; text-decoration: none;}
+
+/* Mobile Nav */
 .mobile-nav{position:fixed;bottom:0;left:0;width:100%;background:var(--nav-bg);display:flex;justify-content:space-around;padding:15px;border-top:1px solid var(--border);z-index:4000;}
-.mobile-nav a{color:var(--text-dim);text-decoration:none;font-size:0.7rem;text-align:center;}
+.mobile-nav a{color:var(--text-dim);text-decoration:none;font-size:0.7rem;text-align:center; cursor:pointer;}
 .mobile-nav i{font-size:1.2rem;display:block;margin-bottom:4px;}
-.emi-select {background: #334155; color: white; border: none; padding: 8px; border-radius: 5px; margin-bottom: 15px; width: 100%;}
+
+input, select, textarea { width:100%; padding:12px; border-radius:8px; border:none; background:#334155; color:white; margin-top:10px; font-family: inherit; }
 </style>
 </head>
 <body>
 
 <nav>
-<a href="#" class="logo">B<span>SMART</span></a>
-<div style="display:flex;gap:15px;align-items:center;">
-  <select id="currencySelector" onchange="updateCurrency()" style="background:none;color:var(--accent);border:1px solid var(--accent);border-radius:5px;font-size:0.7rem; padding: 2px 5px;">
-    <option value="USD">USD ($)</option>
-    <option value="INR">INR (₹)</option>
-  </select>
-  <div onclick="toggleModal('cartModal')" style="cursor:pointer;position:relative;">
-    <i class="fas fa-shopping-bag" style="font-size:1.3rem;"></i>
-    <span id="cart-qty" style="position:absolute;top:-8px;right:-10px;background:red;color:white;padding:2px 5px;border-radius:50%;font-size:9px;">0</span>
+  <a href="#" class="logo">B<span>SMART</span></a>
+  <div style="display:flex;gap:15px;align-items:center;">
+    <select id="currencySelector" onchange="updateCurrency()" style="width:auto; padding:5px; margin:0;">
+      <option value="USD">USD ($)</option>
+      <option value="INR">INR (₹)</option>
+    </select>
+    <div onclick="toggleModal('cartModal')" style="cursor:pointer;position:relative;">
+      <i class="fas fa-shopping-bag" style="font-size:1.3rem;"></i>
+      <span id="cart-qty" style="position:absolute;top:-8px;right:-10px;background:red;color:white;padding:2px 5px;border-radius:50%;font-size:9px;">0</span>
+    </div>
   </div>
-</div>
 </nav>
 
 <div class="sub-nav">
   <div class="search-container">
     <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search BSmart...">
-    <button class="voice-btn" onclick="startVoiceSearch()"><i class="fas fa-microphone" id="mic-icon"></i></button>
+    <button class="voice-btn" onclick="startVoiceSearch()"><i class="fas fa-microphone"></i></button>
   </div>
   <button class="cat-btn active" onclick="filterByCategory('all', this)">All</button>
-  <button class="cat-btn" onclick="filterByCategory('Electronics', this)">Gadgets</button>
   <button class="cat-btn" onclick="filterByCategory('Cloud', this)">Cloud</button>
-  <button class="cat-btn" onclick="filterByCategory('Music', this)">Music</button>
+  <button class="cat-btn" onclick="filterByCategory('Electronics', this)">Gadgets</button>
 </div>
 
 <div class="container">
   <div class="product-grid" id="productGrid"></div>
 </div>
 
-<div id="detailsModal" class="modal-overlay">
+<div id="profileModal" class="modal-overlay">
   <div class="modal-content">
-    <div id="detailsContent"></div>
-    <button class="btn-buy" id="detailAddBtn">Add to Bag</button>
-    <button onclick="toggleModal('detailsModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px; cursor:pointer;">Go Back</button>
+    <h2>User Profile</h2>
+    <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:10px;">Your details are saved locally for faster checkout.</p>
+    <input type="text" id="profName" placeholder="Full Name">
+    <input type="tel" id="profPhone" placeholder="WhatsApp Number">
+    <textarea id="profAddress" placeholder="Delivery Address" rows="3"></textarea>
+    <button onclick="saveProfile()" class="btn-buy" style="margin-top:20px;">Save Profile</button>
+    <button onclick="toggleModal('profileModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px;">Close</button>
+  </div>
+</div>
+
+<div id="termsModal" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Terms & Conditions</h2>
+    <p style="color:var(--text-dim); margin-top:10px; font-size:0.9rem;">Digital products are delivered instantly. Payments are non-refundable after activation.</p>
+    <button onclick="toggleModal('termsModal')" class="btn-buy" style="margin-top:20px;">I Agree</button>
+  </div>
+</div>
+
+<div id="privacyModal" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Privacy Policy</h2>
+    <p style="color:var(--text-dim); margin-top:10px; font-size:0.9rem;">We use your data only for order processing. Your address is stored on your device only.</p>
+    <button onclick="toggleModal('privacyModal')" class="btn-buy" style="margin-top:20px;">Close</button>
   </div>
 </div>
 
 <div id="cartModal" class="modal-overlay">
   <div class="modal-content">
-    <h2 style="margin-bottom: 20px;">Your Bag</h2>
-    <div id="cartItems"></div>
-    <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px solid var(--border);padding-top:15px; margin-top: 10px;">
+    <h2>Your Bag</h2>
+    <div id="cartItems" style="margin:20px 0;"></div>
+    <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px solid var(--border);padding-top:10px;">
       <span>Total:</span><span id="cartTotalText">$0.00</span>
     </div>
-    <div id="cartEMIText" style="margin-top:5px;font-size:0.9rem;color:var(--accent);"></div>
     <button class="btn-buy" style="margin-top:20px;" onclick="checkoutCart()">Proceed to Checkout</button>
-    <button onclick="clearCart()" style="background:none; border:1px solid #ef4444; color:#ef4444; width:100%; padding:10px; border-radius:12px; margin-top:10px; cursor:pointer;">Empty Bag</button>
     <button onclick="toggleModal('cartModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px;">Close</button>
   </div>
 </div>
 
 <div id="checkoutModal" class="modal-overlay">
-  <div class="modal-content">
-    <h2>Secure Checkout</h2>
-    <input type="text" id="custName" placeholder="Full Name" style="width:100%;margin:10px 0;padding:12px;border-radius:8px;border:none; background:#334155; color:white;">
-    <input type="tel" id="custPhone" placeholder="Phone Number" style="width:100%;margin:10px 0;padding:12px;border-radius:8px;border:none; background:#334155; color:white;">
-    <div id="upiQRContainer" style="margin:15px 0;text-align:center;"></div>
-    <div id="emiResult" style="text-align:center;padding:10px;background:rgba(56,189,248,0.1);border-radius:15px;margin:10px 0; font-weight:800; color:var(--accent);"></div>
-    <button class="btn-buy" onclick="proceedCartPayment()">Pay Now</button>
-    <button onclick="confirmCartPayment()" class="btn-emi" style="width:100%; margin-top:10px;">Confirm & WhatsApp</button>
+  <div class="modal-content" style="text-align:center;">
+    <h2>Finalize Order</h2>
+    <div id="upiQRContainer" style="margin:20px 0;"></div>
+    <div id="checkoutDetails" style="text-align:left; font-size:0.8rem; background:rgba(255,255,255,0.05); padding:10px; border-radius:10px;"></div>
+    <button class="btn-buy" style="margin-top:15px;" onclick="confirmCartPayment()">Confirm & Send Receipt</button>
     <button onclick="toggleModal('checkoutModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px;">Cancel</button>
   </div>
 </div>
 
 <div class="mobile-nav">
-  <a href="#"><i class="fas fa-home"></i>Shop</a>
-  <a href="javascript:void(0)" onclick="toggleModal('cartModal')"><i class="fas fa-shopping-bag"></i>Bag</a>
-  <a href="javascript:void(0)" onclick="toggleModal('termsModal')"><i class="fas fa-file-contract"></i>Terms</a>
-  <a href="javascript:void(0)" onclick="toggleModal('privacyModal')"><i class="fas fa-user-secret"></i>Privacy</a>
+  <a onclick="window.scrollTo(0,0)"><i class="fas fa-home"></i>Shop</a>
+  <a onclick="toggleModal('cartModal')"><i class="fas fa-shopping-bag"></i>Bag</a>
+  <a onclick="toggleModal('profileModal')"><i class="fas fa-user-circle"></i>Profile</a>
+  <a onclick="toggleModal('termsModal')"><i class="fas fa-file-contract"></i>Terms</a>
 </div>
+
+<a href="https://wa.me/917093218658" class="support-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <script>
 const exchangeRate = 83.5;
@@ -124,139 +154,110 @@ const myNumber = "917093218658";
 let cart = [];
 
 const products = [
-  { id: '101', name: 'DevOps Pack', category: 'Cloud', price: 199, emi: [3, 6, 12], img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400', desc: 'Enterprise CI/CD automation.', stock: 5 },
-  { id: '102', name: 'Midnight Beat', category: 'Music', price: 29, emi: [3, 6], img: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400', desc: 'High-quality studio drill beat.', stock: 2 },
-  { id: '103', name: 'Smart Watch Pro', category: 'Electronics', price: 249, emi: [3, 6, 12], img: 'https://images.unsplash.com/photo-1546868871-70c122467dff?w=400', desc: 'Waterproof health tracker.', stock: 0 }
+  { id: '101', name: 'Cloud Server (Pro)', category: 'Cloud', price: 199, rating: 4.8, img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400', stock: 5 },
+  { id: '102', name: 'DevOps Bundle', category: 'Cloud', price: 299, rating: 4.9, img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc48?w=400', stock: 2 },
+  { id: '103', name: 'Wireless Pro Pods', category: 'Electronics', price: 149, rating: 4.5, img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400', stock: 10 }
 ];
 
-function formatPrice(usdAmount) {
-  const currency = document.getElementById('currencySelector').value;
-  return (currency === 'INR') 
-    ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(usdAmount * exchangeRate)
-    : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(usdAmount);
+// Profile Logic
+function saveProfile() {
+  const profile = {
+    name: document.getElementById('profName').value,
+    phone: document.getElementById('profPhone').value,
+    address: document.getElementById('profAddress').value
+  };
+  localStorage.setItem('bsmart_user', JSON.stringify(profile));
+  alert("Profile Updated!");
+  toggleModal('profileModal');
+}
+
+function loadProfile() {
+  const data = localStorage.getItem('bsmart_user');
+  if(data) {
+    const p = JSON.parse(data);
+    document.getElementById('profName').value = p.name;
+    document.getElementById('profPhone').value = p.phone;
+    document.getElementById('profAddress').value = p.address;
+  }
+}
+
+function formatPrice(usd) {
+  const curr = document.getElementById('currencySelector').value;
+  return curr === 'INR' ? "₹" + Math.round(usd * exchangeRate).toLocaleString('en-IN') : "$" + usd;
+}
+
+function getStars(rating) {
+  let stars = '';
+  for(let i=0; i<5; i++) stars += `<i class="${i < Math.floor(rating) ? 'fas' : 'far'} fa-star"></i>`;
+  return stars;
 }
 
 function renderProducts() {
   const grid = document.getElementById('productGrid');
-  grid.innerHTML = products.map(p => {
-    const isOutOfStock = p.stock === 0;
-    const stockClass = p.stock < 3 ? 'low-stock' : 'in-stock';
-    const stockMsg = isOutOfStock ? 'Out of Stock' : (p.stock < 4 ? `Only ${p.stock} Left!` : 'In Stock');
-    
-    return `
-      <div class="product-card" data-category="${p.category}" onclick="openDetails('${p.id}')">
-        <img src="${p.img}" style="${isOutOfStock ? 'filter:grayscale(1);' : ''}">
-        <div class="stock-tag ${stockClass}">${stockMsg}</div>
-        <h3>${p.name}</h3>
-        <div class="price">${formatPrice(p.price)}</div>
-        <div class="emi-text">From ${formatPrice(p.price / p.emi[p.emi.length-1])}/mo</div>
-        <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${p.name}', ${p.price}, '${p.id}')">
-          ${isOutOfStock ? 'Unavailable' : 'Add to Bag'}
-        </button>
-      </div>
-    `;
-  }).join('');
-}
-
-function openDetails(id) {
-  const p = products.find(x => x.id === id);
-  const isOutOfStock = p.stock === 0;
-  const content = document.getElementById('detailsContent');
-  content.innerHTML = `
-    <img src="${p.img}" style="width:100%; border-radius:15px; margin-bottom:15px; ${isOutOfStock ? 'filter:grayscale(1);' : ''}">
-    <h2 style="color:var(--accent);">${p.name}</h2>
-    <p style="color:var(--text-dim); margin:10px 0;">${p.desc}</p>
-    <div class="price" style="font-size:2rem;">${formatPrice(p.price)}</div>
-    <div class="stock-tag ${p.stock < 3 ? 'low-stock' : 'in-stock'}" style="margin-bottom:15px;">
-        ${isOutOfStock ? 'Currently Unavailable' : `Available: ${p.stock} units`}
+  grid.innerHTML = products.map(p => `
+    <div class="product-card" data-category="${p.category}">
+      <img src="${p.img}">
+      <div class="rating">${getStars(p.rating)}</div>
+      <div class="stock-tag ${p.stock < 3 ? 'low-stock' : 'in-stock'}">${p.stock} Units Left</div>
+      <h3>${p.name}</h3>
+      <div class="price">${formatPrice(p.price)}</div>
+      <button class="btn-buy" onclick="addToCart('${p.id}')">Add to Bag</button>
     </div>
-    <label style="font-size:0.75rem; color:var(--text-dim);">Select Payment Plan:</label>
-    <select class="emi-select" id="detailEmi-${p.id}" ${isOutOfStock ? 'disabled' : ''}>
-      ${p.emi.map(m => `<option value="${m}">${m} Months EMI</option>`).join('')}
-    </select>
-  `;
-  const addBtn = document.getElementById('detailAddBtn');
-  addBtn.disabled = isOutOfStock;
-  addBtn.innerText = isOutOfStock ? 'Sold Out' : 'Add to Bag';
-  addBtn.onclick = () => {
-    const months = document.getElementById(`detailEmi-${p.id}`).value;
-    addToCart(p.name, p.price, p.id, months);
-    toggleModal('detailsModal');
-  };
-  toggleModal('detailsModal');
+  `).join('');
 }
 
-function addToCart(name, price, id, customMonths = null) {
+function addToCart(id) {
   const p = products.find(x => x.id === id);
   if(p.stock > 0) {
-    const months = customMonths || p.emi[p.emi.length-1];
-    cart.push({ name, price, months: parseInt(months) });
-    p.stock--; // Simple inventory decrement
+    p.stock--;
+    cart.push({...p});
     updateCartUI();
-    renderProducts(); // Refresh stock tags on grid
+    renderProducts();
   }
 }
 
 function updateCartUI() {
   const cartDiv = document.getElementById('cartItems');
-  let totalUsd = 0, totalEmiUsd = 0;
-  cartDiv.innerHTML = cart.length ? cart.map((item, idx) => {
-    totalUsd += item.price;
-    totalEmiUsd += (item.price / item.months);
-    return `
-      <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
-        <div><strong>${item.name}</strong><br><small>${item.months} mo plan</small></div>
-        <div style="text-align:right;">
-            <div>${formatPrice(item.price)}</div>
-            <button onclick="removeItem(${idx})" style="color:var(--danger); background:none; border:none; cursor:pointer; font-size:0.75rem;">Remove</button>
-        </div>
-      </div>`;
-  }).join('') : "<p style='text-align:center; color:var(--text-dim);'>Your bag is empty.</p>";
-
-  document.getElementById('cartTotalText').innerText = formatPrice(totalUsd);
-  document.getElementById('cartEMIText').innerText = `Total Monthly EMI: ${formatPrice(totalEmiUsd)}`;
+  let total = cart.reduce((s, i) => s + i.price, 0);
+  cartDiv.innerHTML = cart.length ? cart.map(item => `
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+      <span>${item.name}</span><span>${formatPrice(item.price)}</span>
+    </div>`).join('') : "Bag is empty";
+  document.getElementById('cartTotalText').innerText = formatPrice(total);
   document.getElementById('cart-qty').innerText = cart.length;
+}
+
+function toggleModal(id) {
+  const m = document.getElementById(id);
+  m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
 }
 
 function checkoutCart() {
   if(!cart.length) return;
-  const currency = document.getElementById('currencySelector').value;
-  let total = 0; cart.forEach(i => total += (currency === 'INR' ? i.price * exchangeRate : i.price));
-  const upiId = "7093218658@ybl";
-  const upiLink = `upi://pay?pa=${upiId}&pn=BSmart&am=${total.toFixed(2)}&cu=INR`;
-  document.getElementById('upiQRContainer').innerHTML = `
-    <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(upiLink)}" style="width:200px; border-radius:10px; border: 5px solid white;">
-    <p style="font-size:0.7rem; margin-top:10px;">Scan to pay ${formatPrice(total / (currency === 'INR' ? exchangeRate : 1))}</p>
-  `;
+  const user = JSON.parse(localStorage.getItem('bsmart_user') || '{}');
+  if(!user.name) return alert("Please set up your Profile first!");
+
+  const total = cart.reduce((s, i) => s + i.price, 0);
+  const upiAmt = (document.getElementById('currencySelector').value === 'INR' ? total * exchangeRate : total).toFixed(2);
+  const upiLink = `upi://pay?pa=7093218658@ybl&am=${upiAmt}&cu=INR&pn=BSmart`;
   
-  let totalEmiUsd = 0; cart.forEach(i => totalEmiUsd += (i.price / i.months));
-  document.getElementById('emiResult').innerText = `Pay ${formatPrice(totalEmiUsd)} monthly`;
-
-  toggleModal('cartModal'); toggleModal('checkoutModal');
-}
-
-function proceedCartPayment() {
-    let totalInINR = 0; cart.forEach(i => totalInINR += (i.price * exchangeRate));
-    window.location.href = `upi://pay?pa=7093218658@ybl&pn=BSmart&am=${totalInINR.toFixed(2)}&cu=INR`;
+  document.getElementById('upiQRContainer').innerHTML = `
+    <img src="https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=${encodeURIComponent(upiLink)}" style="border:5px solid white; border-radius:10px;">
+    <p style="margin-top:10px; font-weight:800; color:var(--accent);">Total: ${formatPrice(total)}</p>
+  `;
+  document.getElementById('checkoutDetails').innerHTML = `
+    <strong>Ship To:</strong> ${user.name}<br>
+    <strong>Phone:</strong> ${user.phone}<br>
+    <strong>Addr:</strong> ${user.address}
+  `;
+  toggleModal('cartModal');
+  toggleModal('checkoutModal');
 }
 
 function confirmCartPayment() {
-  const name = document.getElementById('custName').value || "Customer";
-  const msg = encodeURIComponent(`Order Confirmation\nName: ${name}\nTotal: ${document.getElementById('cartTotalText').innerText}\nItems: ${cart.map(i=>i.name).join(', ')}`);
+  const user = JSON.parse(localStorage.getItem('bsmart_user'));
+  const msg = encodeURIComponent(`Order from ${user.name}\nItems: ${cart.map(i=>i.name).join(', ')}\nTotal: ${document.getElementById('cartTotalText').innerText}\nAddress: ${user.address}`);
   window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
-}
-
-function updateCurrency() { renderProducts(); updateCartUI(); }
-function toggleModal(id) { const m = document.getElementById(id); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
-function clearCart() { cart = []; renderProducts(); updateCartUI(); }
-function removeItem(i) { cart.splice(i, 1); updateCartUI(); }
-
-function filterProducts() {
-  const val = document.getElementById('searchInput').value.toLowerCase();
-  document.querySelectorAll('.product-card').forEach(p => {
-    const match = p.querySelector('h3').innerText.toLowerCase().includes(val);
-    p.style.display = match ? 'flex' : 'none';
-  });
 }
 
 function filterByCategory(cat, btn) {
@@ -267,14 +268,26 @@ function filterByCategory(cat, btn) {
   });
 }
 
+function updateCurrency() { renderProducts(); updateCartUI(); }
+
+function filterProducts() {
+  const val = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.product-card').forEach(p => {
+    p.style.display = p.querySelector('h3').innerText.toLowerCase().includes(val) ? 'flex' : 'none';
+  });
+}
+
 function startVoiceSearch() {
   if (!('webkitSpeechRecognition' in window)) return alert("Voice Search Unavailable");
   const recognition = new webkitSpeechRecognition();
-  recognition.onresult = (e) => { document.getElementById('searchInput').value = e.results[0][0].transcript; filterProducts(); };
+  recognition.onresult = (e) => { 
+    document.getElementById('searchInput').value = e.results[0][0].transcript; 
+    filterProducts(); 
+  };
   recognition.start();
 }
 
-window.onload = renderProducts;
+window.onload = () => { renderProducts(); loadProfile(); };
 </script>
 </body>
 </html>

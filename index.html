@@ -11,6 +11,7 @@
   --bg:#0f172a;--card-bg:#1e293b;--accent:#38bdf8;--text-main:#f1f5f9;
   --text-dim:#94a3b8;--border:rgba(255,255,255,0.1);--nav-bg:#020617;
   --btn-grad:linear-gradient(135deg,#38bdf8 0%,#0ea5e9 100%);
+  --danger: #ef4444; --success: #22c55e;
 }
 *{margin:0;padding:0;box-sizing:border-box;outline:none;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-main);line-height:1.6;padding-bottom:80px;}
@@ -25,19 +26,23 @@ nav{background:var(--nav-bg);padding:15px 5%;display:flex;align-items:center;jus
 .cat-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(56,189,248,0.1);}
 .container{max-width:1200px;margin:30px auto;padding:0 20px;}
 .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:25px;}
-.product-card{background:var(--card-bg);padding:20px;border-radius:20px;border:1px solid var(--border);transition:0.3s;position:relative;display:flex;flex-direction:column;}
+.product-card{background:var(--card-bg);padding:20px;border-radius:20px;border:1px solid var(--border);transition:0.3s;position:relative;display:flex;flex-direction:column; cursor: pointer;}
+.product-card:hover{border-color: var(--accent); transform: translateY(-5px);}
 .product-card img{width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:15px;}
 .badge{position:absolute;top:10px;right:10px;background:var(--accent);color:#000;padding:3px 8px;border-radius:4px;font-size:0.65rem;font-weight:800;}
-.price{font-size:1.5rem;font-weight:800;color:var(--accent);margin:10px 0;}
-.emi-text{margin-bottom:8px;font-size:0.85rem;color:var(--accent);}
-.btn-buy{background:var(--btn-grad);border:none;color:white;width:100%;padding:12px;border-radius:12px;cursor:pointer;font-weight:600;}
-.btn-emi{background:transparent;border:1px solid var(--text-dim);color:var(--text-dim);margin-top:10px;width:100%;padding:8px;border-radius:12px;cursor:pointer;font-size:0.8rem;}
-.audio-preview{background:rgba(0,0,0,0.3);padding:10px;border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.stock-tag{font-size: 0.7rem; font-weight: 600; margin-bottom: 5px;}
+.low-stock{color: var(--danger);}
+.in-stock{color: var(--success);}
+.price{font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 5px;}
+.emi-text{margin-bottom:12px;font-size:0.8rem;color:var(--text-dim);}
+.btn-buy{background:var(--btn-grad);border:none;color:white;width:100%;padding:12px;border-radius:12px;cursor:pointer;font-weight:600;transition: 0.2s;}
+.btn-buy:disabled{background: #475569; cursor: not-allowed; opacity: 0.6;}
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:5000;backdrop-filter:blur(8px);}
-.modal-content{background:var(--card-bg);width:90%;max-width:400px;padding:30px;border-radius:20px;position:relative;}
+.modal-content{background:var(--card-bg);width:90%;max-width:450px;padding:30px;border-radius:20px;position:relative;max-height: 90vh; overflow-y: auto;}
 .mobile-nav{position:fixed;bottom:0;left:0;width:100%;background:var(--nav-bg);display:flex;justify-content:space-around;padding:15px;border-top:1px solid var(--border);z-index:4000;}
 .mobile-nav a{color:var(--text-dim);text-decoration:none;font-size:0.7rem;text-align:center;}
 .mobile-nav i{font-size:1.2rem;display:block;margin-bottom:4px;}
+.emi-select {background: #334155; color: white; border: none; padding: 8px; border-radius: 5px; margin-bottom: 15px; width: 100%;}
 </style>
 </head>
 <body>
@@ -45,9 +50,9 @@ nav{background:var(--nav-bg);padding:15px 5%;display:flex;align-items:center;jus
 <nav>
 <a href="#" class="logo">B<span>SMART</span></a>
 <div style="display:flex;gap:15px;align-items:center;">
-  <select id="currencySelector" onchange="updateCurrency()" style="background:none;color:var(--accent);border:1px solid var(--accent);border-radius:5px;font-size:0.7rem;">
-    <option value="USD">USD</option>
-    <option value="INR">INR</option>
+  <select id="currencySelector" onchange="updateCurrency()" style="background:none;color:var(--accent);border:1px solid var(--accent);border-radius:5px;font-size:0.7rem; padding: 2px 5px;">
+    <option value="USD">USD ($)</option>
+    <option value="INR">INR (₹)</option>
   </select>
   <div onclick="toggleModal('cartModal')" style="cursor:pointer;position:relative;">
     <i class="fas fa-shopping-bag" style="font-size:1.3rem;"></i>
@@ -64,124 +69,45 @@ nav{background:var(--nav-bg);padding:15px 5%;display:flex;align-items:center;jus
   <button class="cat-btn active" onclick="filterByCategory('all', this)">All</button>
   <button class="cat-btn" onclick="filterByCategory('Electronics', this)">Gadgets</button>
   <button class="cat-btn" onclick="filterByCategory('Cloud', this)">Cloud</button>
-  <button class="cat-btn" onclick="filterByCategory('Civil', this)">Engineering</button>
   <button class="cat-btn" onclick="filterByCategory('Music', this)">Music</button>
-  <button class="cat-btn" onclick="filterByCategory('Food', this)">Food</button>
 </div>
 
 <div class="container">
-  <div class="product-grid" id="productGrid">
-    <!-- Cloud Service -->
-    <div class="product-card" data-category="Cloud">
-      <div class="badge">Service</div>
-      <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400">
-      <h3>DevOps Automation Pack</h3>
-      <div class="price" data-usd="199.00">$199.00</div>
-      <div class="emi-text" data-usd="199.00"></div>
-      <label for="emiSelect-101" style="font-size:0.75rem;margin-top:5px;">EMI Duration:</label>
-      <select class="emi-select" id="emiSelect-101" onchange="updateSingleProductEMI('101',199)">
-        <option value="3">3 months</option>
-        <option value="6">6 months</option>
-        <option value="12" selected>12 months</option>
-      </select>
-      <button class="btn-buy" onclick="addToCart('DevOps Pack',199,'101')">Add to Bag</button>
-    </div>
+  <div class="product-grid" id="productGrid"></div>
+</div>
 
-    <!-- Music -->
-    <div class="product-card" data-category="Music">
-      <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400">
-      <h3>Midnight Drill Beat</h3>
-      <div class="audio-preview">
-        <audio id="audio-1"><source src="YOUR_AUDIO_URL" type="audio/mpeg"></audio>
-        <button onclick="togglePlay('1')" id="playBtn-1" style="background:none;border:none;color:var(--accent);cursor:pointer;">
-          <i class="fas fa-play-circle" style="font-size:1.5rem"></i> Preview
-        </button>
-      </div>
-      <div class="price" data-usd="29.00">$29.00</div>
-      <div class="emi-text" data-usd="29.00"></div>
-      <label for="emiSelect-102" style="font-size:0.75rem;margin-top:5px;">EMI Duration:</label>
-      <select class="emi-select" id="emiSelect-102" onchange="updateSingleProductEMI('102',29)">
-        <option value="3">3 months</option>
-        <option value="6">6 months</option>
-        <option value="12" selected>12 months</option>
-      </select>
-      <button class="btn-buy" onclick="addToCart('Midnight Beat',29,'102')">Add to Bag</button>
-    </div>
-
-    <!-- Electronics -->
-    <div class="product-card" data-category="Electronics">
-      <img src="https://images.unsplash.com/photo-1546868871-70c122467dff?w=400">
-      <h3>Smart Watch Pro</h3>
-      <div class="price" data-usd="249.00">$249.00</div>
-      <div class="emi-text" data-usd="249.00"></div>
-      <label for="emiSelect-103" style="font-size:0.75rem;margin-top:5px;">EMI Duration:</label>
-      <select class="emi-select" id="emiSelect-103" onchange="updateSingleProductEMI('103',249)">
-        <option value="3">3 months</option>
-        <option value="6">6 months</option>
-        <option value="12" selected>12 months</option>
-      </select>
-      <button class="btn-buy" onclick="addToCart('Smart Watch Pro',249,'103')">Add to Bag</button>
-    </div>
-
-    <!-- Vehicles -->
-    <div class="product-card" data-category="Vehicles">
-      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400">
-      <h3>Electric Sedan</h3>
-      <div class="price" data-usd="45000.00">$45,000.00</div>
-      <div class="emi-text" data-usd="45000.00"></div>
-      <label for="emiSelect-104" style="font-size:0.75rem;margin-top:5px;">EMI Duration:</label>
-      <select class="emi-select" id="emiSelect-104" onchange="updateSingleProductEMI('104',45000)">
-        <option value="3">3 months</option>
-        <option value="6">6 months</option>
-        <option value="12" selected>12 months</option>
-      </select>
-      <button class="btn-buy" onclick="addToCart('Electric Sedan',45000,'104')">Inquire</button>
-      <button class="btn-emi" onclick="openEMITool(45000)">Check EMI</button>
-    </div>
+<div id="detailsModal" class="modal-overlay">
+  <div class="modal-content">
+    <div id="detailsContent"></div>
+    <button class="btn-buy" id="detailAddBtn">Add to Bag</button>
+    <button onclick="toggleModal('detailsModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px; cursor:pointer;">Go Back</button>
   </div>
 </div>
 
-<!-- Cart Modal -->
 <div id="cartModal" class="modal-overlay">
   <div class="modal-content">
-    <h2>Your Bag</h2>
-    <div id="cartItems" style="margin:20px 0;"></div>
-    <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px solid var(--border);padding-top:10px;">
+    <h2 style="margin-bottom: 20px;">Your Bag</h2>
+    <div id="cartItems"></div>
+    <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px solid var(--border);padding-top:15px; margin-top: 10px;">
       <span>Total:</span><span id="cartTotalText">$0.00</span>
     </div>
     <div id="cartEMIText" style="margin-top:5px;font-size:0.9rem;color:var(--accent);"></div>
     <button class="btn-buy" style="margin-top:20px;" onclick="checkoutCart()">Proceed to Checkout</button>
+    <button onclick="clearCart()" style="background:none; border:1px solid #ef4444; color:#ef4444; width:100%; padding:10px; border-radius:12px; margin-top:10px; cursor:pointer;">Empty Bag</button>
     <button onclick="toggleModal('cartModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px;">Close</button>
   </div>
 </div>
 
-<!-- Checkout Modal -->
 <div id="checkoutModal" class="modal-overlay">
   <div class="modal-content">
-    <h2>Checkout</h2>
-    <input type="text" id="custName" placeholder="Your Name" style="width:100%;margin:5px 0;padding:10px;border-radius:8px;border:none;">
-    <input type="tel" id="custPhone" placeholder="Phone Number" style="width:100%;margin:5px 0;padding:10px;border-radius:8px;border:none;">
+    <h2>Secure Checkout</h2>
+    <input type="text" id="custName" placeholder="Full Name" style="width:100%;margin:10px 0;padding:12px;border-radius:8px;border:none; background:#334155; color:white;">
+    <input type="tel" id="custPhone" placeholder="Phone Number" style="width:100%;margin:10px 0;padding:12px;border-radius:8px;border:none; background:#334155; color:white;">
     <div id="upiQRContainer" style="margin:15px 0;text-align:center;"></div>
-    <div id="emiResult" style="text-align:center;padding:10px;background:rgba(56,189,248,0.1);border-radius:15px;margin:10px 0;">$0.00 / mo</div>
-    <button class="btn-buy" onclick="proceedCartPayment()">Proceed to Pay</button>
-    <button class="btn-emi" onclick="confirmCartPayment()">Confirm Payment</button>
-    <button onclick="toggleModal('checkoutModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px;">Close</button>
-  </div>
-</div>
-
-<!-- Terms & Privacy -->
-<div id="termsModal" class="modal-overlay">
-  <div class="modal-content">
-    <h2>Terms & Conditions</h2>
-    <p style="font-size:0.8rem;margin-top:10px;">Your terms & conditions content here...</p>
-    <button class="btn-buy" onclick="toggleModal('termsModal')">Close</button>
-  </div>
-</div>
-<div id="privacyModal" class="modal-overlay">
-  <div class="modal-content">
-    <h2>Privacy Policy</h2>
-    <p style="font-size:0.8rem;margin-top:10px;">Your privacy policy content here...</p>
-    <button class="btn-buy" onclick="toggleModal('privacyModal')">Close</button>
+    <div id="emiResult" style="text-align:center;padding:10px;background:rgba(56,189,248,0.1);border-radius:15px;margin:10px 0; font-weight:800; color:var(--accent);"></div>
+    <button class="btn-buy" onclick="proceedCartPayment()">Pay Now</button>
+    <button onclick="confirmCartPayment()" class="btn-emi" style="width:100%; margin-top:10px;">Confirm & WhatsApp</button>
+    <button onclick="toggleModal('checkoutModal')" style="background:none;border:none;color:var(--text-dim);width:100%;margin-top:10px;">Cancel</button>
   </div>
 </div>
 
@@ -193,156 +119,162 @@ nav{background:var(--nav-bg);padding:15px 5%;display:flex;align-items:center;jus
 </div>
 
 <script>
-// Globals
-const exchangeRate=83.5;
-const myNumber="917093218658";
-let cart=[];
+const exchangeRate = 83.5;
+const myNumber = "917093218658";
+let cart = [];
 
-// Add to cart with EMI selection
-function addToCart(name,price,emiId){
-  const months=parseInt(document.getElementById('emiSelect-'+emiId).value);
-  cart.push({name,price,months,emiId});
-  updateCartUI();
+const products = [
+  { id: '101', name: 'DevOps Pack', category: 'Cloud', price: 199, emi: [3, 6, 12], img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400', desc: 'Enterprise CI/CD automation.', stock: 5 },
+  { id: '102', name: 'Midnight Beat', category: 'Music', price: 29, emi: [3, 6], img: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400', desc: 'High-quality studio drill beat.', stock: 2 },
+  { id: '103', name: 'Smart Watch Pro', category: 'Electronics', price: 249, emi: [3, 6, 12], img: 'https://images.unsplash.com/photo-1546868871-70c122467dff?w=400', desc: 'Waterproof health tracker.', stock: 0 }
+];
+
+function formatPrice(usdAmount) {
+  const currency = document.getElementById('currencySelector').value;
+  return (currency === 'INR') 
+    ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(usdAmount * exchangeRate)
+    : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(usdAmount);
 }
 
-// Update cart UI with per-item EMI
-function updateCartUI(){
-  const currency=document.getElementById('currencySelector').value;
-  const cartDiv=document.getElementById('cartItems');
-  cartDiv.innerHTML="";
-  let total=0, totalEMI=0;
-  cart.forEach((i,index)=>{
-    let amt=currency==='INR'?i.price*exchangeRate:i.price;
-    let emiPerMonth=amt/i.months;
-    total+=amt;
-    totalEMI+=emiPerMonth;
-    cartDiv.innerHTML+=`<div style="display:flex;justify-content:space-between;margin:5px 0;">${i.name} <span>${currency==='INR'?'₹'+amt.toLocaleString():'$'+amt.toFixed(2)}</span><br><small style="color:var(--accent);">${currency==='INR'?'₹'+emiPerMonth.toLocaleString():'$'+emiPerMonth.toFixed(2)} / ${i.months} mo</small></div>`;
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = products.map(p => {
+    const isOutOfStock = p.stock === 0;
+    const stockClass = p.stock < 3 ? 'low-stock' : 'in-stock';
+    const stockMsg = isOutOfStock ? 'Out of Stock' : (p.stock < 4 ? `Only ${p.stock} Left!` : 'In Stock');
+    
+    return `
+      <div class="product-card" data-category="${p.category}" onclick="openDetails('${p.id}')">
+        <img src="${p.img}" style="${isOutOfStock ? 'filter:grayscale(1);' : ''}">
+        <div class="stock-tag ${stockClass}">${stockMsg}</div>
+        <h3>${p.name}</h3>
+        <div class="price">${formatPrice(p.price)}</div>
+        <div class="emi-text">From ${formatPrice(p.price / p.emi[p.emi.length-1])}/mo</div>
+        <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart('${p.name}', ${p.price}, '${p.id}')">
+          ${isOutOfStock ? 'Unavailable' : 'Add to Bag'}
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+function openDetails(id) {
+  const p = products.find(x => x.id === id);
+  const isOutOfStock = p.stock === 0;
+  const content = document.getElementById('detailsContent');
+  content.innerHTML = `
+    <img src="${p.img}" style="width:100%; border-radius:15px; margin-bottom:15px; ${isOutOfStock ? 'filter:grayscale(1);' : ''}">
+    <h2 style="color:var(--accent);">${p.name}</h2>
+    <p style="color:var(--text-dim); margin:10px 0;">${p.desc}</p>
+    <div class="price" style="font-size:2rem;">${formatPrice(p.price)}</div>
+    <div class="stock-tag ${p.stock < 3 ? 'low-stock' : 'in-stock'}" style="margin-bottom:15px;">
+        ${isOutOfStock ? 'Currently Unavailable' : `Available: ${p.stock} units`}
+    </div>
+    <label style="font-size:0.75rem; color:var(--text-dim);">Select Payment Plan:</label>
+    <select class="emi-select" id="detailEmi-${p.id}" ${isOutOfStock ? 'disabled' : ''}>
+      ${p.emi.map(m => `<option value="${m}">${m} Months EMI</option>`).join('')}
+    </select>
+  `;
+  const addBtn = document.getElementById('detailAddBtn');
+  addBtn.disabled = isOutOfStock;
+  addBtn.innerText = isOutOfStock ? 'Sold Out' : 'Add to Bag';
+  addBtn.onclick = () => {
+    const months = document.getElementById(`detailEmi-${p.id}`).value;
+    addToCart(p.name, p.price, p.id, months);
+    toggleModal('detailsModal');
+  };
+  toggleModal('detailsModal');
+}
+
+function addToCart(name, price, id, customMonths = null) {
+  const p = products.find(x => x.id === id);
+  if(p.stock > 0) {
+    const months = customMonths || p.emi[p.emi.length-1];
+    cart.push({ name, price, months: parseInt(months) });
+    p.stock--; // Simple inventory decrement
+    updateCartUI();
+    renderProducts(); // Refresh stock tags on grid
+  }
+}
+
+function updateCartUI() {
+  const cartDiv = document.getElementById('cartItems');
+  let totalUsd = 0, totalEmiUsd = 0;
+  cartDiv.innerHTML = cart.length ? cart.map((item, idx) => {
+    totalUsd += item.price;
+    totalEmiUsd += (item.price / item.months);
+    return `
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+        <div><strong>${item.name}</strong><br><small>${item.months} mo plan</small></div>
+        <div style="text-align:right;">
+            <div>${formatPrice(item.price)}</div>
+            <button onclick="removeItem(${idx})" style="color:var(--danger); background:none; border:none; cursor:pointer; font-size:0.75rem;">Remove</button>
+        </div>
+      </div>`;
+  }).join('') : "<p style='text-align:center; color:var(--text-dim);'>Your bag is empty.</p>";
+
+  document.getElementById('cartTotalText').innerText = formatPrice(totalUsd);
+  document.getElementById('cartEMIText').innerText = `Total Monthly EMI: ${formatPrice(totalEmiUsd)}`;
+  document.getElementById('cart-qty').innerText = cart.length;
+}
+
+function checkoutCart() {
+  if(!cart.length) return;
+  const currency = document.getElementById('currencySelector').value;
+  let total = 0; cart.forEach(i => total += (currency === 'INR' ? i.price * exchangeRate : i.price));
+  const upiId = "7093218658@ybl";
+  const upiLink = `upi://pay?pa=${upiId}&pn=BSmart&am=${total.toFixed(2)}&cu=INR`;
+  document.getElementById('upiQRContainer').innerHTML = `
+    <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(upiLink)}" style="width:200px; border-radius:10px; border: 5px solid white;">
+    <p style="font-size:0.7rem; margin-top:10px;">Scan to pay ${formatPrice(total / (currency === 'INR' ? exchangeRate : 1))}</p>
+  `;
+  
+  let totalEmiUsd = 0; cart.forEach(i => totalEmiUsd += (i.price / i.months));
+  document.getElementById('emiResult').innerText = `Pay ${formatPrice(totalEmiUsd)} monthly`;
+
+  toggleModal('cartModal'); toggleModal('checkoutModal');
+}
+
+function proceedCartPayment() {
+    let totalInINR = 0; cart.forEach(i => totalInINR += (i.price * exchangeRate));
+    window.location.href = `upi://pay?pa=7093218658@ybl&pn=BSmart&am=${totalInINR.toFixed(2)}&cu=INR`;
+}
+
+function confirmCartPayment() {
+  const name = document.getElementById('custName').value || "Customer";
+  const msg = encodeURIComponent(`Order Confirmation\nName: ${name}\nTotal: ${document.getElementById('cartTotalText').innerText}\nItems: ${cart.map(i=>i.name).join(', ')}`);
+  window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
+}
+
+function updateCurrency() { renderProducts(); updateCartUI(); }
+function toggleModal(id) { const m = document.getElementById(id); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
+function clearCart() { cart = []; renderProducts(); updateCartUI(); }
+function removeItem(i) { cart.splice(i, 1); updateCartUI(); }
+
+function filterProducts() {
+  const val = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.product-card').forEach(p => {
+    const match = p.querySelector('h3').innerText.toLowerCase().includes(val);
+    p.style.display = match ? 'flex' : 'none';
   });
-  document.getElementById('cartTotalText').innerText=currency==='INR'?'₹'+total.toLocaleString():'$'+total.toFixed(2);
-  document.getElementById('cartEMIText').innerText=`Total EMI/month: ${currency==='INR'?'₹'+totalEMI.toLocaleString():'$'+totalEMI.toFixed(2)}`;
-  document.getElementById('cart-qty').innerText=cart.length;
 }
 
-// Checkout
-function checkoutCart(){
-  const currency=document.getElementById('currencySelector').value;
-  let total=0;
-  cart.forEach(i=>total+=currency==='INR'?i.price*exchangeRate:i.price);
-  const upiAmount=total.toFixed(2);
-  const upiId="7093218658@ybl";
-  const upiLink=`upi://pay?pa=${upiId}&pn=${encodeURIComponent("BSmart Order")}&am=${upiAmount}&cu=INR`;
-  const qrURL=`https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(upiLink)}&choe=UTF-8`;
-  document.getElementById('upiQRContainer').innerHTML=`<img src="${qrURL}" style="width:200px;height:200px;">`;
-  toggleModal('checkoutModal');
-  calculateCartEMI();
-}
-
-// Calculate total EMI in checkout
-function calculateCartEMI(){
-  const currency=document.getElementById('currencySelector').value;
-  let totalEMI=0;
-  cart.forEach(i=>{
-    let amt=currency==='INR'?i.price*exchangeRate:i.price;
-    totalEMI+=amt/i.months;
-  });
-  document.getElementById('emiResult').innerText=currency==='INR'?'₹'+totalEMI.toLocaleString()+' / mo':'$'+totalEMI.toFixed(2)+' / mo';
-}
-
-// UPI Payment
-function proceedCartPayment(){
-  const currency=document.getElementById('currencySelector').value;
-  let total=0;
-  cart.forEach(i=>total+=currency==='INR'?i.price*exchangeRate:i.price);
-  const upiAmount=total.toFixed(2);
-  const upiId="7093218658@ybl";
-  const upiLink=`upi://pay?pa=${upiId}&pn=${encodeURIComponent("BSmart Order")}&am=${upiAmount}&cu=INR`;
-  window.open(upiLink,"_blank");
-  alert("Complete payment in your UPI app, then click 'Confirm Payment'.");
-}
-
-// Confirm & WhatsApp
-function confirmCartPayment(){
-  const custName=document.getElementById('custName').value||"Customer";
-  const custPhone=document.getElementById('custPhone').value||"";
-  const currency=document.getElementById('currencySelector').value;
-  let total=0;
-  cart.forEach(i=>total+=currency==='INR'?i.price*exchangeRate:i.price);
-  let cartItemsText=cart.map(i=>`• ${i.name}: ${currency==='INR'?'₹'+(i.price*exchangeRate).toLocaleString():'$'+i.price.toFixed(2)} (${i.months} mo EMI)`).join('\n');
-  const msg=encodeURIComponent(`✅ Payment Completed!\nCustomer: ${custName}\nPhone: ${custPhone}\nTotal: ${currency==='INR'?'₹'+total.toLocaleString():'$'+total.toFixed(2)}\n\nItems:\n${cartItemsText}`);
-  window.open(`https://wa.me/${myNumber}?text=${msg}`,'_blank');
-  toggleModal('checkoutModal');
-  alert("Payment confirmed! WhatsApp message sent.");
-}
-
-// Per-product EMI
-function updateSingleProductEMI(id,usdPrice){
-  const currency=document.getElementById('currencySelector').value;
-  const months=parseInt(document.getElementById('emiSelect-'+id).value);
-  let price=usdPrice;
-  if(currency==='INR') price*=exchangeRate;
-  document.querySelector('#emiSelect-'+id).previousElementSibling.innerText=currency==='INR'?'₹'+(price/months).toLocaleString()+' / mo':'$'+(price/months).toFixed(2)+' / mo';
-}
-
-// Initialize per-product EMI
-document.querySelectorAll('.product-card').forEach(card=>{
-  const id=card.querySelector('.emi-select').id.split('-')[1];
-  const usdPrice=parseFloat(card.querySelector('.price').dataset.usd);
-  updateSingleProductEMI(id,usdPrice);
-  card.querySelector('.emi-select').addEventListener('change',()=>updateSingleProductEMI(id,usdPrice));
-});
-
-// Currency change updates EMIs
-function updateCurrency(){
-  document.querySelectorAll('.product-card').forEach(card=>{
-    const id=card.querySelector('.emi-select').id.split('-')[1];
-    const usdPrice=parseFloat(card.querySelector('.price').dataset.usd);
-    updateSingleProductEMI(id,usdPrice);
-  });
-  updateCartUI();
-}
-
-// Audio preview
-function togglePlay(id){
-  const audio=document.getElementById('audio-'+id);
-  const btn=document.getElementById('playBtn-'+id);
-  if(audio.paused){audio.play(); btn.innerHTML='<i class="fas fa-pause-circle"></i> Pause';}
-  else{audio.pause(); btn.innerHTML='<i class="fas fa-play-circle"></i> Preview';}
-}
-
-// Filter
-function filterByCategory(cat,btn){
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+function filterByCategory(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.product-card').forEach(p=>{
-    p.style.display=(cat==='all'||p.dataset.category===cat)?'flex':'none';
-  });
-}
-function filterProducts(){
-  const val=document.getElementById('searchInput').value.toLowerCase();
-  document.querySelectorAll('.product-card').forEach(p=>{
-    p.style.display=p.querySelector('h3').innerText.toLowerCase().includes(val)?'flex':'none';
+  document.querySelectorAll('.product-card').forEach(p => {
+    p.style.display = (cat === 'all' || p.dataset.category === cat) ? 'flex' : 'none';
   });
 }
 
-// Modal toggle
-function toggleModal(id){
-  const modal=document.getElementById(id);
-  modal.style.display=(modal.style.display==='flex')?'none':'flex';
-}
-
-// Voice search
-let recognition;
-function startVoiceSearch(){
-  if(!('webkitSpeechRecognition' in window)){alert("Voice not supported"); return;}
-  recognition=new webkitSpeechRecognition();
-  recognition.lang='en-US';
+function startVoiceSearch() {
+  if (!('webkitSpeechRecognition' in window)) return alert("Voice Search Unavailable");
+  const recognition = new webkitSpeechRecognition();
+  recognition.onresult = (e) => { document.getElementById('searchInput').value = e.results[0][0].transcript; filterProducts(); };
   recognition.start();
-  recognition.onresult=function(e){document.getElementById('searchInput').value=e.results[0][0].transcript; filterProducts();}
-  recognition.onerror=function(){alert("Voice recognition error");}
 }
 
-// Dummy EMI tool
-function openEMITool(price){alert("EMI Calculator for ₹"+price);}
+window.onload = renderProducts;
 </script>
 </body>
 </html>

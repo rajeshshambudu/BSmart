@@ -1,59 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSmart | Global SuperApp</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --bg: #0f172a; --card-bg: #1e293b; --accent: #38bdf8; --text-main: #f1f5f9;
-            --text-dim: #94a3b8; --border: rgba(255, 255, 255, 0.1); --nav-bg: #020617;
-            --btn-grad: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; padding-bottom: 80px; }
-        
-        /* Navigation */
-        nav { background: var(--nav-bg); padding: 15px 5%; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
-        .logo { font-weight: 800; font-size: 1.6rem; color: white; text-decoration: none; }
-        .logo span { color: var(--accent); }
-        
-        .sub-nav { background: #1e293b; padding: 12px 5%; display: flex; align-items: center; gap: 15px; overflow-x: auto; position: sticky; top: 65px; z-index: 999; }
-        .search-container { flex-grow: 1; max-width: 400px; display: flex; position: relative; }
-        .search-container input { width: 100%; padding: 10px 45px 10px 15px; border-radius: 25px; border: none; background: #334155; color: white; }
-        .voice-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--accent); cursor: pointer; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSmart | Global SuperApp</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+    --bg: #0f172a; --card-bg: #1e293b; --accent: #38bdf8; --text-main: #f1f5f9;
+    --text-dim: #94a3b8; --border: rgba(255, 255, 255, 0.1); --nav-bg: #020617;
+    --btn-grad: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; padding-bottom: 80px; }
 
-        .cat-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 8px 18px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; }
-        .cat-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56, 189, 248, 0.1); }
+/* Navigation */
+nav { background: var(--nav-bg); padding: 15px 5%; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
+.logo { font-weight: 800; font-size: 1.6rem; color: white; text-decoration: none; }
+.logo span { color: var(--accent); }
 
-        /* Grid & Cards */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .product-card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; position: relative; display: flex; flex-direction: column; }
-        .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; }
-        
-        .badge { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #000; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; }
-        .price { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
-        .btn-buy { background: var(--btn-grad); border: none; color: white; width: 100%; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; }
-        .btn-emi { background: transparent; border: 1px solid var(--text-dim); color: var(--text-dim); margin-top: 10px; width: 100%; padding: 8px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; }
+.sub-nav { background: #1e293b; padding: 12px 5%; display: flex; align-items: center; gap: 15px; overflow-x: auto; position: sticky; top: 65px; z-index: 999; }
+.search-container { flex-grow: 1; max-width: 400px; display: flex; position: relative; }
+.search-container input { width: 100%; padding: 10px 45px 10px 15px; border-radius: 25px; border: none; background: #334155; color: white; }
+.voice-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--accent); cursor: pointer; }
 
-        /* Audio Player Style */
-        .audio-preview { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+.cat-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 8px 18px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; }
+.cat-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56, 189, 248, 0.1); }
 
-        /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 5000; backdrop-filter: blur(8px); }
-        .modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 30px; border-radius: 20px; position: relative; }
-        
-        /* Mobile Footer */
-        .mobile-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 4000; }
-        .mobile-nav a { color: var(--text-dim); text-decoration: none; font-size: 0.7rem; text-align: center; }
-        .mobile-nav i { font-size: 1.2rem; display: block; margin-bottom: 4px; }
-    </style>
+/* Grid & Cards */
+.container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+.product-card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; position: relative; display: flex; flex-direction: column; }
+.product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; }
+
+.badge { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #000; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; }
+.price { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
+.btn-buy { background: var(--btn-grad); border: none; color: white; width: 100%; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+.btn-emi { background: transparent; border: 1px solid var(--text-dim); color: var(--text-dim); margin-top: 10px; width: 100%; padding: 8px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; }
+
+/* Audio Player Style */
+.audio-preview { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+
+/* Modals */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 5000; backdrop-filter: blur(8px); }
+.modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 30px; border-radius: 20px; position: relative; }
+
+/* Mobile Footer */
+.mobile-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 4000; }
+.mobile-nav a { color: var(--text-dim); text-decoration: none; font-size: 0.7rem; text-align: center; }
+.mobile-nav i { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+input, textarea, select { background:#334155; color:white; border:none; border-radius:8px; }
+</style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
     <a href="#" class="logo">B<span>SMART</span></a>
     <div style="display: flex; gap: 15px; align-items: center;">
@@ -68,6 +70,7 @@
     </div>
 </nav>
 
+<!-- SUB NAV -->
 <div class="sub-nav">
     <div class="search-container">
         <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search BSmart...">
@@ -81,15 +84,17 @@
     <button class="cat-btn" onclick="filterByCategory('Food', this)">Food</button>
 </div>
 
+<!-- PRODUCTS -->
 <div class="container">
     <div class="product-grid" id="productGrid">
-        
+
         <div class="product-card" data-category="Cloud">
             <div class="badge">Service</div>
             <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400">
             <h3>DevOps Automation Pack</h3>
             <div class="price" data-usd="199.00">$199.00</div>
             <button class="btn-buy" onclick="addToCart('DevOps Pack', 199)">Add to Bag</button>
+            <button class="btn-buy" onclick="startPurchase('DevOps Automation Pack', 199)">Buy Now</button>
         </div>
 
         <div class="product-card" data-category="Music">
@@ -101,6 +106,7 @@
             </div>
             <div class="price" data-usd="29.00">$29.00</div>
             <button class="btn-buy" onclick="addToCart('Midnight Beat', 29)">Add to Bag</button>
+            <button class="btn-buy" onclick="startPurchase('Midnight Drill Beat', 29)">Buy Now</button>
         </div>
 
         <div class="product-card" data-category="Civil">
@@ -109,6 +115,7 @@
             <h3>Structural Design Review</h3>
             <div class="price" data-usd="150.00">$150.00</div>
             <button class="btn-buy" onclick="buyNow('Structural Design Review')">Book Consultant</button>
+            <button class="btn-buy" onclick="startPurchase('Structural Design Review', 150)">Buy Now</button>
         </div>
 
         <div class="product-card" data-category="Electronics">
@@ -116,6 +123,7 @@
             <h3>Smart Watch Pro</h3>
             <div class="price" data-usd="249.00">$249.00</div>
             <button class="btn-buy" onclick="addToCart('Smart Watch Pro', 250)">Add to Bag</button>
+            <button class="btn-buy" onclick="startPurchase('Smart Watch Pro', 250)">Buy Now</button>
         </div>
 
         <div class="product-card" data-category="Vehicles">
@@ -124,11 +132,13 @@
             <div class="price" data-usd="45000.00">$45,000.00</div>
             <button class="btn-buy" onclick="buyNow('Electric Sedan')">Inquire</button>
             <button class="btn-emi" onclick="openEMITool(45000)">Check EMI</button>
+            <button class="btn-buy" onclick="startPurchase('Electric Sedan', 45000)">Buy Now</button>
         </div>
 
     </div>
 </div>
 
+<!-- CART MODAL -->
 <div id="cartModal" class="modal-overlay">
     <div class="modal-content">
         <h2>Your Bag</h2>
@@ -141,6 +151,7 @@
     </div>
 </div>
 
+<!-- EMI MODAL -->
 <div id="emiModal" class="modal-overlay">
     <div class="modal-content">
         <h2>EMI Calculator</h2>
@@ -149,96 +160,146 @@
     </div>
 </div>
 
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Checkout</h2>
+        <input id="custName" placeholder="Full Name">
+        <input id="custEmail" placeholder="Email">
+        <input id="custPhone" placeholder="Phone">
+        <textarea id="custAddress" placeholder="Address"></textarea>
+
+        <h4 style="margin-top:15px;">Payment Method</h4>
+        <select id="paymentMethod">
+            <option value="UPI">UPI</option>
+            <option value="Card">Card</option>
+            <option value="WhatsApp">WhatsApp</option>
+            <option value="COD">Cash on Delivery</option>
+        </select>
+
+        <h3 id="checkoutTotal" style="margin:15px 0;"></h3>
+
+        <button class="btn-buy" onclick="processPayment()">Proceed to Pay</button>
+        <button onclick="toggleModal('checkoutModal')" class="btn-emi">Cancel</button>
+    </div>
+</div>
+
+<!-- MOBILE NAV -->
 <div class="mobile-nav">
     <a href="#"><i class="fas fa-home"></i>Shop</a>
     <a href="javascript:void(0)" onclick="toggleModal('cartModal')"><i class="fas fa-shopping-bag"></i>Bag</a>
     <a href="mailto:shambudurajesh05@gmail.com"><i class="fas fa-user"></i>Account</a>
 </div>
 
+<!-- SCRIPTS -->
 <script>
-    const exchangeRate = 83.5;
-    const myNumber = "917093218658"; 
-    let cart = [];
+const exchangeRate = 83.5;
+const myNumber = "917093218658"; 
+let cart = [];
+let currentProduct = {};
 
-    function updateCurrency() {
-        const currency = document.getElementById('currencySelector').value;
-        document.querySelectorAll('.price').forEach(p => {
-            const usd = parseFloat(p.dataset.usd);
-            p.innerText = currency === 'INR' ? '₹' + (usd * exchangeRate).toLocaleString() : '$' + usd.toFixed(2);
-        });
-        updateCartUI();
-    }
+function updateCurrency() {
+    const currency = document.getElementById('currencySelector').value;
+    document.querySelectorAll('.price').forEach(p => {
+        const usd = parseFloat(p.dataset.usd);
+        p.innerText = currency === 'INR' ? '₹' + (usd * exchangeRate).toLocaleString() : '$' + usd.toFixed(2);
+    });
+    updateCartUI();
+}
 
-    function addToCart(n, p) {
-        cart.push({name: n, price: p});
-        document.getElementById('cart-qty').innerText = cart.length;
-        updateCartUI();
-    }
+function addToCart(n, p) {
+    cart.push({name: n, price: p});
+    document.getElementById('cart-qty').innerText = cart.length;
+    updateCartUI();
+}
 
-    function updateCartUI() {
-        const currency = document.getElementById('currencySelector').value;
-        let total = 0;
-        document.getElementById('cartItems').innerHTML = cart.map(i => {
-            total += i.price;
-            return `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${i.name}</span><span>${currency==='INR'?'₹'+(i.price*exchangeRate).toLocaleString():'$'+i.price}</span></div>`;
-        }).join('');
-        document.getElementById('cartTotalText').innerText = currency === 'INR' ? '₹'+(total*exchangeRate).toLocaleString() : '$'+total.toFixed(2);
-    }
+function updateCartUI() {
+    const currency = document.getElementById('currencySelector').value;
+    let total = 0;
+    document.getElementById('cartItems').innerHTML = cart.map(i => {
+        total += i.price;
+        return `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${i.name}</span><span>${currency==='INR'?'₹'+(i.price*exchangeRate).toLocaleString():'$'+i.price}</span></div>`;
+    }).join('');
+    document.getElementById('cartTotalText').innerText = currency === 'INR' ? '₹'+(total*exchangeRate).toLocaleString() : '$'+total.toFixed(2);
+}
 
-    function checkout() {
-        const total = document.getElementById('cartTotalText').innerText;
-        const msg = encodeURIComponent(`New BSmart Order! Total: ${total}. Please confirm.`);
-        window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
-    }
+function checkout() {
+    const total = document.getElementById('cartTotalText').innerText;
+    const msg = encodeURIComponent(`New BSmart Order! Total: ${total}. Please confirm.`);
+    window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
+}
 
-    function buyNow(name) {
-        window.open(`https://wa.me/${myNumber}?text=I want to book: ${name}`, '_blank');
-    }
+function buyNow(name) {
+    window.open(`https://wa.me/${myNumber}?text=I want to book: ${name}`, '_blank');
+}
 
-    function openEMITool(amt) {
-        const monthly = amt / 12;
-        const currency = document.getElementById('currencySelector').value;
-        document.getElementById('monthlyResult').innerText = (currency==='INR'?'₹'+(monthly*exchangeRate).toLocaleString():'$'+monthly.toFixed(2)) + " / mo";
-        toggleModal('emiModal');
-    }
+function openEMITool(amt) {
+    const monthly = amt / 12;
+    const currency = document.getElementById('currencySelector').value;
+    document.getElementById('monthlyResult').innerText = (currency==='INR'?'₹'+(monthly*exchangeRate).toLocaleString():'$'+monthly.toFixed(2)) + " / mo";
+    toggleModal('emiModal');
+}
 
-    function toggleModal(id) {
-        const m = document.getElementById(id);
-        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
-    }
+function toggleModal(id) {
+    const m = document.getElementById(id);
+    m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+}
 
-    function filterByCategory(cat, btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.dataset.category === cat) ? "flex" : "none";
-        });
-    }
+function filterByCategory(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.style.display = (cat === 'all' || card.dataset.category === cat) ? "flex" : "none";
+    });
+}
 
-    function startVoiceSearch() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!SpeechRecognition) return;
-        const rec = new SpeechRecognition();
-        rec.onstart = () => { document.getElementById('mic-icon').style.color = "red"; };
-        rec.onresult = (e) => { 
-            document.getElementById('searchInput').value = e.results[0][0].transcript;
-            filterProducts(); 
-        };
-        rec.onend = () => { document.getElementById('mic-icon').style.color = "var(--accent)"; };
-        rec.start();
-    }
+function startVoiceSearch() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SpeechRecognition) return;
+    const rec = new SpeechRecognition();
+    rec.onstart = () => { document.getElementById('mic-icon').style.color = "red"; };
+    rec.onresult = (e) => { 
+        document.getElementById('searchInput').value = e.results[0][0].transcript;
+        filterProducts(); 
+    };
+    rec.onend = () => { document.getElementById('mic-icon').style.color = "var(--accent)"; };
+    rec.start();
+}
 
-    function filterProducts() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        document.querySelectorAll('.product-card').forEach(c => {
-            c.style.display = c.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
-        });
-    }
+function filterProducts() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.style.display = card.querySelector('h3').innerText.toLowerCase().includes(q) ? "flex" : "none";
+    });
+}
 
-    function togglePlay(id) {
-        const a = document.getElementById('audio-'+id);
-        if(a.paused) a.play(); else a.pause();
-    }
+function togglePlay(id) {
+    const audio = document.getElementById('audio-'+id);
+    const btn = document.getElementById('playBtn-'+id);
+    if(audio.paused) { audio.play(); btn.innerHTML='<i class="fas fa-pause-circle"></i> Pause'; }
+    else { audio.pause(); btn.innerHTML='<i class="fas fa-play-circle"></i> Preview'; }
+}
+
+/* BUY NOW / CHECKOUT FLOW */
+function startPurchase(name, price) {
+    currentProduct = {name, price};
+    const currency = document.getElementById('currencySelector').value;
+    document.getElementById('checkoutTotal').innerText = currency==='INR'?'Total: ₹'+(price*exchangeRate).toLocaleString():'Total: $'+price.toFixed(2);
+    toggleModal('checkoutModal');
+}
+
+function processPayment() {
+    const name = document.getElementById('custName').value;
+    const phone = document.getElementById('custPhone').value;
+    const method = document.getElementById('paymentMethod').value;
+    if(!name || !phone) { alert("Fill name and phone"); return; }
+    const currency = document.getElementById('currencySelector').value;
+    const total = currency==='INR'?'₹'+(currentProduct.price*exchangeRate).toLocaleString():'$'+currentProduct.price.toFixed(2);
+    const msg = encodeURIComponent(`New Order\nProduct: ${currentProduct.name}\nAmount: ${total}\nName: ${name}\nPhone: ${phone}\nPayment: ${method}`);
+    window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
+    toggleModal('checkoutModal');
+}
 </script>
+
 </body>
 </html>

@@ -1,201 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YOUR_ID');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rajesh Store | Cloud, Engineering & Beats</title>
+    <title>BSmart SuperApp | Global Hub</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
-            --bg: #0b0f1a;
-            --card-bg: #161e2e;
-            --accent: #38bdf8;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
-            --nav-bg: #131921; /* Amazon Dark Navy */
+            --bg: #0f172a; --card-bg: #1e293b; --accent: #38bdf8; --text-main: #f1f5f9;
+            --text-dim: #94a3b8; --border: rgba(255, 255, 255, 0.1); --nav-bg: #020617;
+            --btn-grad: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; padding-bottom: 80px; overflow-x: hidden; }
 
-        body.light-mode {
-            --bg: #f3f3f3;
-            --card-bg: #ffffff;
-            --text-main: #131921;
-            --text-dim: #565959;
-            --border: #ddd;
-        }
+        /* Navigation */
+        nav { background: var(--nav-bg); padding: 15px 5%; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
+        .logo { font-weight: 800; font-size: 1.6rem; color: white; text-decoration: none; }
+        .logo span { color: var(--accent); }
+        
+        .sub-nav { background: #1e293b; padding: 12px 5%; display: flex; align-items: center; gap: 15px; overflow-x: auto; position: sticky; top: 65px; z-index: 999; }
+        .search-container { flex-grow: 1; max-width: 400px; display: flex; position: relative; }
+        .search-container input { width: 100%; padding: 10px 45px 10px 15px; border-radius: 25px; border: none; background: #334155; color: white; }
+        .voice-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--accent); cursor: pointer; font-size: 1.2rem; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); transition: 0.3s; }
+        .cat-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 8px 18px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; }
+        .cat-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56, 189, 248, 0.1); }
 
-        /* --- NAVIGATION --- */
-        nav {
-            background: var(--nav-bg);
-            padding: 10px 2rem;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .logo { font-weight: 800; color: white; text-decoration: none; font-size: 1.5rem; }
-        .search-container { flex-grow: 1; display: flex; }
-        .search-container input {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 4px 0 0 4px;
-            outline: none;
-        }
-        .search-btn {
-            background: #febd69;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .nav-tools { display: flex; gap: 15px; align-items: center; color: white; }
+        /* Grid & Cards */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .product-card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; position: relative; display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; }
+        
+        .badge { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #000; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; }
+        .price { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
+        .btn-buy { background: var(--btn-grad); border: none; color: white; width: 100%; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+        .btn-emi { background: transparent; border: 1px solid var(--text-dim); color: var(--text-dim); margin-top: 10px; width: 100%; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7), var(--bg)), 
-                        url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        #typing-text { color: var(--accent); font-weight: bold; min-height: 1.2em; border-right: 2px solid var(--accent); }
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 5000; backdrop-filter: blur(8px); }
+        .modal-content { background: var(--card-bg); width: 90%; max-width: 450px; padding: 30px; border-radius: 25px; position: relative; border: 1px solid var(--border); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-dim); }
 
-        /* --- PRODUCT GRID --- */
-        .container { max-width: 1300px; margin: -50px auto 0; padding: 0 20px; }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .product-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            transition: 0.3s;
-            position: relative;
-        }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
-        .price { font-size: 1.5rem; font-weight: 800; margin: 10px 0; }
-        .btn-add {
-            background: #ffd814;
-            border: 1px solid #fcd200;
-            border-radius: 20px;
-            padding: 8px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* --- CART WIDGET --- */
-        .cart-count { background: #f08804; color: white; padding: 2px 6px; border-radius: 50%; font-size: 12px; }
-
-        @keyframes blink { 50% { border-color: transparent; } }
+        /* Mobile nav */
+        .mobile-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 4000; }
+        .mobile-nav a { color: var(--text-dim); text-decoration: none; font-size: 0.7rem; text-align: center; }
+        .mobile-nav i { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .listening { animation: pulse 1s infinite; color: #ef4444 !important; }
     </style>
 </head>
 <body>
 
 <nav>
-    <a href="#" class="logo">RAJESH<span>.com</span></a>
-    <div class="search-container">
-        <input type="text" placeholder="Search Cloud Solutions, Engineering Tools, or Beats...">
-        <button class="search-btn">🔍</button>
-    </div>
-    <div class="nav-tools">
-        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:20px;">🌓</button>
-        <div>Returns <br><strong>& Orders</strong></div>
-        <div style="cursor:pointer">🛒 <span class="cart-count" id="cart-qty">0</span></div>
+    <a href="#" class="logo">B<span>SMART</span></a>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <select id="currencySelector" onchange="updateCurrency()" style="background: none; color: var(--accent); border: 1px solid var(--accent); border-radius: 5px; font-size: 0.8rem; cursor: pointer;">
+            <option value="USD">USD</option>
+            <option value="INR">INR</option>
+        </select>
+        <div onclick="toggleModal('cartModal')" style="cursor:pointer; position:relative;">
+            <i class="fas fa-shopping-bag" style="font-size: 1.4rem;"></i>
+            <span id="cart-qty" style="position:absolute; top:-10px; right:-10px; background:red; color:white; padding:2px 6px; border-radius:50%; font-size:9px; font-weight:800;">0</span>
+        </div>
     </div>
 </nav>
 
-<div class="hero">
-    <h1 class="fade-in">Experience Precision</h1>
-    <div id="typing-text"></div>
+<div class="sub-nav">
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Try 'Engineering' or 'Watch'...">
+        <button class="voice-btn" onclick="startVoiceSearch()"><i class="fas fa-microphone" id="mic-icon"></i></button>
+    </div>
+    <button class="cat-btn active" onclick="filterByCategory('all', this)">All</button>
+    <button class="cat-btn" onclick="filterByCategory('Civil', this)">Civil</button>
+    <button class="cat-btn" onclick="filterByCategory('Cloud', this)">Cloud</button>
+    <button class="cat-btn" onclick="filterByCategory('Food', this)">Food</button>
+    <button class="cat-btn" onclick="filterByCategory('Electronics', this)">Gadgets</button>
+    <button class="cat-btn" onclick="filterByCategory('Music', this)">Music</button>
 </div>
 
 <div class="container">
-    <div class="product-grid">
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&w=400&q=80" alt="Azure Setup">
-            <h3>Cloud Infrastructure Setup</h3>
-            <p style="color:var(--text-dim)">Professional Azure DevOps CI/CD pipeline configuration.</p>
-            <div class="price">$499.00</div>
-            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+    <div class="product-grid" id="productGrid">
+        
+        <div class="product-card" data-category="Cloud">
+            <div class="badge">Tech</div>
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400">
+            <h3>DevOps Automation Pack</h3>
+            <div class="price" data-usd="199.00">$199.00</div>
+            <button class="btn-buy" onclick="addToCart('DevOps Pack', 199)">Add to Bag</button>
         </div>
 
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&w=400&q=80" alt="Engineering">
-            <h3>Structural Analysis Tool</h3>
-            <p style="color:var(--text-dim)">Advanced IS 456 RCC Design Spreadsheet Pro.</p>
-            <div class="price">$89.00</div>
-            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+        <div class="product-card" data-category="Civil">
+            <div class="badge">Professional</div>
+            <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?w=400">
+            <h3>Structural Design Review</h3>
+            <div class="price" data-usd="150.00">$150.00</div>
+            <button class="btn-buy" onclick="buyNow('Structural Review')">Book Consult</button>
         </div>
 
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=400&q=80" alt="Music">
-            <h3>Exclusive Beat Pack</h3>
-            <p style="color:var(--text-dim)">10 High-fidelity FL Studio hip-hop instrumentals.</p>
-            <div class="price">$120.00</div>
-            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+        <div class="product-card" data-category="Music">
+            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400">
+            <h3>BSmart Drill Beat</h3>
+            <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; margin-bottom:10px; text-align:center;">
+                <i class="fas fa-play-circle" style="color:var(--accent); cursor:pointer;"></i> <small>Preview Available</small>
+            </div>
+            <div class="price" data-usd="29.00">$29.00</div>
+            <button class="btn-buy" onclick="addToCart('Drill Beat', 29)">License Beat</button>
         </div>
+
+        <div class="product-card" data-category="Food">
+            <div class="badge" style="background:#10b981;">Fresh</div>
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400">
+            <h3>Gourmet Burger Box</h3>
+            <div class="price" data-usd="12.00">$12.00</div>
+            <button class="btn-buy" onclick="addToCart('Burger Box', 12)">Order Now</button>
+        </div>
+
+        <div class="product-card" data-category="Vehicles">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400">
+            <h3>Electric Sedan Pro</h3>
+            <div class="price" data-usd="45000.00">$45,000.00</div>
+            <button class="btn-buy" onclick="buyNow('Electric Sedan')">Inquire</button>
+            <button class="btn-emi" onclick="openEMITool(45000)">Check EMI</button>
+        </div>
+
+        <div class="product-card" data-category="Electronics">
+            <img src="https://images.unsplash.com/photo-1546868871-70c122467dff?w=400">
+            <h3>BSmart Watch Ultra</h3>
+            <div class="price" data-usd="249.00">$249.00</div>
+            <button class="btn-buy" onclick="addToCart('Watch Ultra', 249)">Add to Bag</button>
+        </div>
+
     </div>
 </div>
 
+<div id="cartModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-btn" onclick="toggleModal('cartModal')">&times;</span>
+        <h2 style="color:var(--accent);">Your Super Bag</h2>
+        <div id="cartItems" style="margin:20px 0; max-height:200px; overflow-y:auto;"></div>
+        <div style="display:flex; justify-content:space-between; font-weight:800; border-top:1px solid var(--border); padding-top:10px;">
+            <span>Total:</span><span id="cartTotalText">$0.00</span>
+        </div>
+        <div style="background:rgba(16,185,129,0.1); border:1px solid #10b981; padding:10px; border-radius:10px; margin:15px 0; font-size:0.7rem; color:#10b981; text-align:center;">
+            <i class="fas fa-shield-check"></i> Secure Engineering-Grade Checkout
+        </div>
+        <button class="btn-buy" onclick="checkout()">Checkout via WhatsApp</button>
+    </div>
+</div>
+
+<div id="emiModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-btn" onclick="toggleModal('emiModal')">&times;</span>
+        <h2 style="color:var(--accent);">EMI Planner</h2>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:15px;">Calculated for 12 Monthly Installments</p>
+        <div style="background:rgba(56,189,248,0.1); padding:30px; border-radius:20px; text-align:center;">
+            <h1 id="monthlyResult" style="color:var(--accent);">$0.00</h1>
+            <small>Estimated monthly payment</small>
+        </div>
+        <button class="btn-buy" style="margin-top:20px;" onclick="toggleModal('emiModal')">Close</button>
+    </div>
+</div>
+
+<div id="legalModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-btn" onclick="toggleModal('legalModal')">&times;</span>
+        <h2 style="color:var(--accent); margin-bottom:10px;">Privacy & Terms</h2>
+        <div style="font-size:0.8rem; color:var(--text-dim); height:250px; overflow-y:auto; text-align:left;">
+            <p><strong>Privacy:</strong> We only use your WhatsApp number to fulfill orders. We do not store or sell your personal data.</p><br>
+            <p><strong>Terms:</strong> Services like Civil Consultations and Cloud DevOps are subject to scheduling. Physical goods like food are delivery-dependent.</p><br>
+            <p><strong>Refunds:</strong> Digital assets (Music) are non-refundable. Consultation services can be rescheduled once for free.</p>
+        </div>
+        <button class="btn-buy" style="margin-top:20px;" onclick="toggleModal('legalModal')">I Agree</button>
+    </div>
+</div>
+
+<footer style="text-align: center; padding: 40px 20px; color: var(--text-dim); font-size: 0.8rem;">
+    <p>&copy; 2026 BSmart SuperApp by Rajesh.</p>
+    <a href="javascript:void(0)" onclick="toggleModal('legalModal')" style="color:var(--accent); margin:0 10px;">Legal</a>
+</footer>
+
+<div class="mobile-nav">
+    <a href="#"><i class="fas fa-home"></i>Home</a>
+    <a href="javascript:void(0)" onclick="toggleModal('cartModal')"><i class="fas fa-shopping-bag"></i>Bag</a>
+    <a href="mailto:shambudurajesh05@gmail.com"><i class="fas fa-envelope"></i>Contact</a>
+</div>
+
 <script>
-    // Theme Toggle
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
+    const exchangeRate = 83.5;
+    const myNumber = "917093218658"; 
+    let cart = [];
+
+    function updateCurrency() {
+        const currency = document.getElementById('currencySelector').value;
+        document.querySelectorAll('.price').forEach(p => {
+            const usd = parseFloat(p.dataset.usd);
+            p.innerText = currency === 'INR' ? '₹' + (usd * exchangeRate).toLocaleString() : '$' + usd.toFixed(2);
+        });
+        updateCartUI();
     }
 
-    // Typing Animation
-    const textElement = document.getElementById("typing-text");
-    const phrases = ["Deploying Cloud Solutions...", "Designing Safe Structures...", "Producing Modern Beats..."];
-    let pIdx = 0, cIdx = 0, isDeleting = false;
-
-    function typeEffect() {
-        let current = phrases[pIdx];
-        if (isDeleting) {
-            textElement.textContent = current.substring(0, cIdx - 1);
-            cIdx--;
-        } else {
-            textElement.textContent = current.substring(0, cIdx + 1);
-            cIdx++;
-        }
-
-        if (!isDeleting && cIdx === current.length) {
-            isDeleting = true;
-            setTimeout(typeEffect, 2000);
-        } else if (isDeleting && cIdx === 0) {
-            isDeleting = false;
-            pIdx = (pIdx + 1) % phrases.length;
-            setTimeout(typeEffect, 500);
-        } else {
-            setTimeout(typeEffect, isDeleting ? 50 : 100);
+    function addToCart(name, price) {
+        cart.push({name, price});
+        document.getElementById('cart-qty').innerText = cart.length;
+        updateCartUI();
+        // Google Analytics Event
+        if(typeof gtag === 'function') {
+            gtag('event', 'add_to_cart', {'item_name': name, 'value': price});
         }
     }
 
-    // Cart Logic
-    let count = 0;
-    function addToCart() {
-        count++;
-        document.getElementById('cart-qty').innerText = count;
-        alert("Item added to your Rajesh Store cart!");
+    function updateCartUI() {
+        const currency = document.getElementById('currencySelector').value;
+        let total = 0;
+        document.getElementById('cartItems').innerHTML = cart.map(i => {
+            total += i.price;
+            let displayPrice = currency === 'INR' ? '₹'+(i.price*exchangeRate).toLocaleString() : '$'+i.price;
+            return `<div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>${i.name}</span><span>${displayPrice}</span></div>`;
+        }).join('');
+        document.getElementById('cartTotalText').innerText = currency === 'INR' ? '₹'+(total*exchangeRate).toLocaleString() : '$'+total.toFixed(2);
     }
 
-    document.addEventListener("DOMContentLoaded", typeEffect);
+    function checkout() {
+        const total = document.getElementById('cartTotalText').innerText;
+        const msg = encodeURIComponent(`Hi BSmart! I'd like to place an order. Total: ${total}. Please confirm my booking.`);
+        window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
+    }
+
+    function buyNow(name) {
+        window.open(`https://wa.me/${myNumber}?text=Inquiry: I am interested in ${name}`, '_blank');
+    }
+
+    function openEMITool(amt) {
+        const monthly = amt / 12;
+        const currency = document.getElementById('currencySelector').value;
+        document.getElementById('monthlyResult').innerText = currency === 'INR' ? '₹'+(monthly*exchangeRate).toLocaleString() : '$'+monthly.toFixed(2);
+        toggleModal('emiModal');
+    }
+
+    function toggleModal(id) {
+        const m = document.getElementById(id);
+        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function filterByCategory(cat, btn) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.style.display = (cat === 'all' || card.dataset.category === cat) ? "flex" : "none";
+        });
+    }
+
+    function startVoiceSearch() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!SpeechRecognition) return alert("Voice search not supported in this browser.");
+        const rec = new SpeechRecognition();
+        rec.onstart = () => { document.getElementById('mic-icon').classList.add('listening'); };
+        rec.onresult = (e) => { 
+            document.getElementById('searchInput').value = e.results[0][0].transcript;
+            filterProducts(); 
+        };
+        rec.onend = () => { document.getElementById('mic-icon').classList.remove('listening'); };
+        rec.start();
+    }
+
+    function filterProducts() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        document.querySelectorAll('.product-card').forEach(c => {
+            c.style.display = c.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
+        });
+    }
 </script>
-
 </body>
 </html>

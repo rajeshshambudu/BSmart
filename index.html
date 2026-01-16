@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajesh Store | Cloud, Engineering & Beats</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0f1a;
+            --card-bg: #161e2e;
+            --accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --nav-bg: #131921; /* Amazon Dark Navy */
+        }
+
+        body.light-mode {
+            --bg: #f3f3f3;
+            --card-bg: #ffffff;
+            --text-main: #131921;
+            --text-dim: #565959;
+            --border: #ddd;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); transition: 0.3s; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            background: var(--nav-bg);
+            padding: 10px 2rem;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo { font-weight: 800; color: white; text-decoration: none; font-size: 1.5rem; }
+        .search-container { flex-grow: 1; display: flex; }
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+        .search-btn {
+            background: #febd69;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .nav-tools { display: flex; gap: 15px; align-items: center; color: white; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7), var(--bg)), 
+                        url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        #typing-text { color: var(--accent); font-weight: bold; min-height: 1.2em; border-right: 2px solid var(--accent); }
+
+        /* --- PRODUCT GRID --- */
+        .container { max-width: 1300px; margin: -50px auto 0; padding: 0 20px; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+            position: relative;
+        }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
+        .price { font-size: 1.5rem; font-weight: 800; margin: 10px 0; }
+        .btn-add {
+            background: #ffd814;
+            border: 1px solid #fcd200;
+            border-radius: 20px;
+            padding: 8px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* --- CART WIDGET --- */
+        .cart-count { background: #f08804; color: white; padding: 2px 6px; border-radius: 50%; font-size: 12px; }
+
+        @keyframes blink { 50% { border-color: transparent; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#" class="logo">RAJESH<span>.com</span></a>
+    <div class="search-container">
+        <input type="text" placeholder="Search Cloud Solutions, Engineering Tools, or Beats...">
+        <button class="search-btn">🔍</button>
+    </div>
+    <div class="nav-tools">
+        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:20px;">🌓</button>
+        <div>Returns <br><strong>& Orders</strong></div>
+        <div style="cursor:pointer">🛒 <span class="cart-count" id="cart-qty">0</span></div>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1 class="fade-in">Experience Precision</h1>
+    <div id="typing-text"></div>
+</div>
+
+<div class="container">
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&w=400&q=80" alt="Azure Setup">
+            <h3>Cloud Infrastructure Setup</h3>
+            <p style="color:var(--text-dim)">Professional Azure DevOps CI/CD pipeline configuration.</p>
+            <div class="price">$499.00</div>
+            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&w=400&q=80" alt="Engineering">
+            <h3>Structural Analysis Tool</h3>
+            <p style="color:var(--text-dim)">Advanced IS 456 RCC Design Spreadsheet Pro.</p>
+            <div class="price">$89.00</div>
+            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=400&q=80" alt="Music">
+            <h3>Exclusive Beat Pack</h3>
+            <p style="color:var(--text-dim)">10 High-fidelity FL Studio hip-hop instrumentals.</p>
+            <div class="price">$120.00</div>
+            <button class="btn-add" onclick="addToCart()">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Theme Toggle
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+    }
+
+    // Typing Animation
+    const textElement = document.getElementById("typing-text");
+    const phrases = ["Deploying Cloud Solutions...", "Designing Safe Structures...", "Producing Modern Beats..."];
+    let pIdx = 0, cIdx = 0, isDeleting = false;
+
+    function typeEffect() {
+        let current = phrases[pIdx];
+        if (isDeleting) {
+            textElement.textContent = current.substring(0, cIdx - 1);
+            cIdx--;
+        } else {
+            textElement.textContent = current.substring(0, cIdx + 1);
+            cIdx++;
+        }
+
+        if (!isDeleting && cIdx === current.length) {
+            isDeleting = true;
+            setTimeout(typeEffect, 2000);
+        } else if (isDeleting && cIdx === 0) {
+            isDeleting = false;
+            pIdx = (pIdx + 1) % phrases.length;
+            setTimeout(typeEffect, 500);
+        } else {
+            setTimeout(typeEffect, isDeleting ? 50 : 100);
+        }
+    }
+
+    // Cart Logic
+    let count = 0;
+    function addToCart() {
+        count++;
+        document.getElementById('cart-qty').innerText = count;
+        alert("Item added to your Rajesh Store cart!");
+    }
+
+    document.addEventListener("DOMContentLoaded", typeEffect);
+</script>
+
+</body>
+</html>

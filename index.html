@@ -11,7 +11,7 @@
   --bg:#0f172a;--card-bg:#1e293b;--accent:#38bdf8;--text-main:#f1f5f9;
   --text-dim:#94a3b8;--border:rgba(255,255,255,0.1);--nav-bg:#020617;
   --btn-grad:linear-gradient(135deg,#38bdf8 0%,#0ea5e9 100%);
-  --danger: #ef4444; --success: #22c55e;
+  --danger: #ef4444; --success: #22c55e; --star: #fbbf24;
 }
 *{margin:0;padding:0;box-sizing:border-box;outline:none;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-main);padding-bottom:100px;}
@@ -21,22 +21,28 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-main);
 .toast { background: var(--card-bg); color: white; padding: 15px 20px; border-radius: 12px; border-left: 4px solid var(--accent); box-shadow: 0 10px 25px rgba(0,0,0,0.5); animation: slideIn 0.3s ease forwards; pointer-events: auto; }
 @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-/* Layout */
+/* Navigation */
 nav{background:var(--nav-bg);padding:15px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000;border-bottom:1px solid var(--border);}
 .logo{font-weight:800;font-size:1.6rem;color:white;text-decoration:none;}
 .logo span{color:var(--accent);}
 
+/* Product Grid */
 .container{max-width:1200px;margin:30px auto;padding:0 20px;}
 .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;}
 .product-card{background:var(--card-bg);padding:15px;border-radius:20px;border:1px solid var(--border); transition: 0.3s;}
-.product-card img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:10px; background: #000;}
+.product-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+.product-card img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:10px; background: #000; cursor: pointer;}
+
+/* Filtering */
+.cat-btn { background: var(--card-bg); color: var(--text-dim); border: 1px solid var(--border); padding: 8px 18px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: 0.3s; margin-right: 8px; }
+.cat-btn.active { background: var(--btn-grad); color: white; border-color: transparent; }
 
 /* Modals */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:5000;backdrop-filter:blur(8px);}
 .modal-content{background:var(--card-bg);width:95%;max-width:450px;padding:25px;border-radius:20px;max-height: 90vh; overflow-y: auto;}
 
 .btn-buy{background:var(--btn-grad);border:none;color:white;width:100%;padding:12px;border-radius:12px;cursor:pointer;font-weight:600;margin-top:10px;}
-input, select { width:100%; padding:12px; border-radius:8px; border:none; background:#334155; color:white; margin-top:8px; font-family:inherit;}
+input, select, textarea { width:100%; padding:12px; border-radius:8px; border:none; background:#334155; color:white; margin-top:8px; font-family:inherit;}
 
 .mobile-nav{position:fixed;bottom:0;left:0;width:100%;background:var(--nav-bg);display:flex;justify-content:space-around;padding:12px;border-top:1px solid var(--border);z-index:4000;}
 .mobile-nav a{color:var(--text-dim);text-decoration:none;font-size:0.7rem;text-align:center; cursor:pointer;}
@@ -56,6 +62,18 @@ input, select { width:100%; padding:12px; border-radius:8px; border:none; backgr
 </nav>
 
 <div class="container">
+  <div style="margin-bottom: 20px; position: relative;">
+    <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-5px); color: var(--text-dim);"></i>
+    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search products..." style="padding-left: 45px; margin-top:0;">
+  </div>
+
+  <div id="categoryFilters" style="display:flex; overflow-x:auto; padding-bottom:15px; margin-bottom:10px;">
+    <button class="cat-btn active" onclick="filterByCategory('All', this)">All</button>
+    <button class="cat-btn" onclick="filterByCategory('Tech', this)">Tech</button>
+    <button class="cat-btn" onclick="filterByCategory('Fashion', this)">Fashion</button>
+    <button class="cat-btn" onclick="filterByCategory('Services', this)">Services</button>
+  </div>
+
   <div class="product-grid" id="productGrid"></div>
 </div>
 
@@ -65,14 +83,38 @@ input, select { width:100%; padding:12px; border-radius:8px; border:none; backgr
     <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin:15px 0;">
       <h4 style="margin-bottom:5px;">Add New Product</h4>
       <input type="text" id="newPName" placeholder="Name">
-      <input type="number" id="newPPrice" placeholder="Base Price in USD">
+      <input type="number" id="newPPrice" placeholder="Price in USD">
+      <select id="newPCategory">
+        <option value="Tech">Tech</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Services">Services</option>
+      </select>
       <input type="text" id="newPImg" placeholder="Image URL">
-      <div id="imagePreview" style="width:100%; height:80px; border:1px dashed var(--border); border-radius:10px; margin:10px 0; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-        <span style="font-size:0.6rem; color:var(--text-dim);">Live Preview</span>
-      </div>
       <button onclick="addNewProduct()" class="btn-buy" style="background:var(--success);">Save Product</button>
     </div>
+    <h4>Manage Inventory</h4>
+    <div id="adminProductList" style="margin:10px 0; max-height:180px; overflow-y:auto; border:1px solid var(--border); border-radius:10px; padding:5px;"></div>
+    <button onclick="downloadCSV()" class="btn-buy" style="background:#475569;">Export CSV</button>
     <button onclick="toggleModal('dashboardModal')" class="btn-buy">Close</button>
+  </div>
+</div>
+
+<div id="productModal" class="modal-overlay">
+  <div class="modal-content">
+    <div id="productDetailContent"></div>
+    <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+    <h4>Leave a Review</h4>
+    <div style="display:flex; gap:10px; margin:10px 0; color:var(--star); font-size:1.2rem;" id="ratingInput">
+        <i class="far fa-star" onclick="setRating(1)" style="cursor:pointer"></i>
+        <i class="far fa-star" onclick="setRating(2)" style="cursor:pointer"></i>
+        <i class="far fa-star" onclick="setRating(3)" style="cursor:pointer"></i>
+        <i class="far fa-star" onclick="setRating(4)" style="cursor:pointer"></i>
+        <i class="far fa-star" onclick="setRating(5)" style="cursor:pointer"></i>
+    </div>
+    <input type="text" id="reviewerName" placeholder="Your Name">
+    <textarea id="reviewComment" placeholder="Write your comment..." rows="3"></textarea>
+    <button class="btn-buy" onclick="submitReview()">Post Review</button>
+    <button onclick="toggleModal('productModal')" style="background:none; border:none; color:var(--text-dim); width:100%; margin-top:10px; cursor:pointer;">Close</button>
   </div>
 </div>
 
@@ -80,9 +122,12 @@ input, select { width:100%; padding:12px; border-radius:8px; border:none; backgr
   <div class="modal-content">
     <h2>Your Bag</h2>
     <div id="cartItems" style="margin:20px 0;"></div>
-    <div style="font-weight:800; border-top:1px solid var(--border); padding-top:10px;">Total: <span id="cartTotalText">₹0</span></div>
+    <div style="font-weight:800; border-top:1px solid var(--border); padding-top:10px; display:flex; justify-content:space-between;">
+        <span>Total:</span>
+        <span id="cartTotalText">₹0</span>
+    </div>
     <button class="btn-buy" onclick="checkoutCart()">Order on WhatsApp</button>
-    <button onclick="toggleModal('cartModal')" style="background:none; border:none; color:var(--text-dim); width:100%; margin-top:10px;">Back to Shop</button>
+    <button onclick="toggleModal('cartModal')" style="background:none; border:none; color:var(--text-dim); width:100%; margin-top:10px; cursor:pointer;">Back to Shop</button>
   </div>
 </div>
 
@@ -95,93 +140,169 @@ input, select { width:100%; padding:12px; border-radius:8px; border:none; backgr
 <script>
 const ADMIN_PASS = "1234";
 const myNumber = "917093218658";
-const RATE = 83.5; // Exchange Rate: 1 USD = 83.5 INR
+const RATE = 83.5;
 
 let cart = [];
+let selectedProductId = null;
+let currentRating = 0;
 let products = JSON.parse(localStorage.getItem('bsmart_inventory')) || [
-  { id: '1', name: 'Cloud Server Pro', price: 199, img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc48?w=500' },
-  { id: '2', name: 'Elite Smartwatch', price: 299, img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500' }
+  { id: '1', name: 'Cloud Server Pro', price: 199, category: 'Tech', img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc48?w=500', reviews: [] },
+  { id: '2', name: 'Elite Smartwatch', price: 299, category: 'Tech', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500', reviews: [] }
 ];
 
 function secureAdmin() {
-  if(prompt("Enter Admin Passcode:") === ADMIN_PASS) { toggleModal('dashboardModal'); } 
+  if(prompt("Enter Admin Passcode:") === ADMIN_PASS) { renderAdminList(); toggleModal('dashboardModal'); }
   else { alert("Unauthorized Access"); }
 }
 
 function formatMoney(usdAmount) {
   const curr = document.getElementById('currencyChoice').value;
-  if (curr === 'INR') {
-    return '₹' + (usdAmount * RATE).toLocaleString('en-IN', {maximumFractionDigits: 0});
-  }
+  if (curr === 'INR') return '₹' + (usdAmount * RATE).toLocaleString('en-IN', {maximumFractionDigits: 0});
   return '$' + usdAmount.toLocaleString();
 }
 
-function renderProducts() {
+/* Core Rendering */
+function renderProducts(list = products) {
   const grid = document.getElementById('productGrid');
-  grid.innerHTML = products.map(p => `
+  grid.innerHTML = list.map(p => {
+    const avg = p.reviews && p.reviews.length > 0 
+      ? (p.reviews.reduce((s, r) => s + r.rating, 0) / p.reviews.length).toFixed(1) 
+      : "0";
+    return `
     <div class="product-card">
-      <img src="${p.img}" onerror="this.src='https://placehold.co/400x250/1e293b/38bdf8?text=Product'">
-      <h3>${p.name}</h3>
-      <div style="color:var(--accent); font-weight:800; font-size:1.2rem; margin:10px 0;">${formatMoney(p.price)}</div>
+      <img src="${p.img}" onclick="openProductDetails('${p.id}')" onerror="this.src='https://placehold.co/400x250/1e293b/38bdf8?text=Product'">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.7rem; color:var(--accent); text-transform:uppercase;">${p.category || 'General'}</span>
+        <span style="font-size:0.8rem; color:var(--star);"><i class="fas fa-star"></i> ${avg}</span>
+      </div>
+      <h3 style="margin:5px 0;">${p.name}</h3>
+      <div style="color:var(--text-main); font-weight:800; font-size:1.2rem; margin-bottom:10px;">${formatMoney(p.price)}</div>
       <button class="btn-buy" onclick="addToCart('${p.id}')">Add to Bag</button>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
+/* Filtering & Search */
+function handleSearch() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  renderProducts(products.filter(p => p.name.toLowerCase().includes(query)));
+}
+
+function filterByCategory(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat === 'All' ? products : products.filter(p => p.category === cat));
+}
+
+/* Cart Logic */
 function addToCart(id) {
   const p = products.find(x => x.id === id);
-  cart.push({...p});
+  const exists = cart.find(i => i.id === id);
+  if(exists) exists.qty++; else cart.push({...p, qty: 1});
   updateCartUI();
   showToast(`${p.name} added!`);
 }
 
+function updateQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if(!item) return;
+    item.qty += delta;
+    if(item.qty <= 0) cart = cart.filter(i => i.id !== id);
+    updateCartUI();
+}
+
 function updateCartUI() {
-  let totalUSD = cart.reduce((s, i) => s + i.price, 0);
+  let totalUSD = cart.reduce((s, i) => s + (i.price * i.qty), 0);
   document.getElementById('cartTotalText').innerText = formatMoney(totalUSD);
-  document.getElementById('cartItems').innerHTML = cart.map((item, i) => `
-    <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.9rem;">
-      <span>${item.name}</span>
-      <b>${formatMoney(item.price)}</b>
+  const container = document.getElementById('cartItems');
+  if(cart.length === 0) { container.innerHTML = `<p style="text-align:center; color:var(--text-dim);">Empty bag</p>`; return; }
+  container.innerHTML = cart.map(item => `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; background:rgba(255,255,255,0.03); padding:10px; border-radius:10px;">
+      <div><div style="font-weight:600; font-size:0.85rem;">${item.name}</div><div style="color:var(--accent); font-size:0.8rem;">${formatMoney(item.price * item.qty)}</div></div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button onclick="updateQty('${item.id}', -1)" style="background:#334155; border:none; color:white; width:25px; height:25px; border-radius:5px;">-</button>
+        <span style="font-size:0.9rem;">${item.qty}</span>
+        <button onclick="updateQty('${item.id}', 1)" style="background:#334155; border:none; color:white; width:25px; height:25px; border-radius:5px;">+</button>
+      </div>
     </div>`).join('');
 }
 
+/* Review System */
+function openProductDetails(id) {
+    selectedProductId = id;
+    const p = products.find(x => x.id === id);
+    if(!p.reviews) p.reviews = [];
+    document.getElementById('productDetailContent').innerHTML = `
+        <img src="${p.img}" style="width:100%; border-radius:12px; height:180px; object-fit:cover;">
+        <h2 style="margin-top:15px;">${p.name}</h2>
+        <p style="color:var(--text-dim); font-size:0.9rem;">Category: ${p.category}</p>
+        <div style="margin-top:15px; max-height:150px; overflow-y:auto;">
+            ${p.reviews.length > 0 ? p.reviews.map(r => `
+                <div style="padding:8px 0; border-bottom:1px solid var(--border);">
+                    <div style="color:var(--star); font-size:0.7rem;">${'★'.repeat(r.rating)}</div>
+                    <div style="font-size:0.8rem;"><b>${r.user}</b>: ${r.comment}</div>
+                </div>`).join('') : '<p style="color:var(--text-dim); font-size:0.8rem;">No reviews yet.</p>'}
+        </div>`;
+    toggleModal('productModal');
+}
+
+function setRating(n) {
+    currentRating = n;
+    const stars = document.getElementById('ratingInput').children;
+    for(let i=0; i<5; i++) stars[i].className = i < n ? 'fas fa-star' : 'far fa-star';
+}
+
+function submitReview() {
+    const name = document.getElementById('reviewerName').value;
+    const comment = document.getElementById('reviewComment').value;
+    if(!name || !comment || currentRating === 0) return alert("Fill all review fields");
+    const p = products.find(x => x.id === selectedProductId);
+    p.reviews.push({ user: name, comment: comment, rating: currentRating });
+    localStorage.setItem('bsmart_inventory', JSON.stringify(products));
+    document.getElementById('reviewerName').value = ''; document.getElementById('reviewComment').value = '';
+    setRating(0); openProductDetails(selectedProductId); renderProducts();
+}
+
+/* Admin Functions */
 function addNewProduct() {
   const name = document.getElementById('newPName').value;
-  const price = document.getElementById('newPPrice').value;
-  let img = document.getElementById('newPImg').value;
-
-  if(!name || !price) return alert("Fill all fields");
-
-  products.push({ id: Date.now().toString(), name, price: parseFloat(price), img: img || '' });
+  const price = parseFloat(document.getElementById('newPPrice').value);
+  const category = document.getElementById('newPCategory').value;
+  const img = document.getElementById('newPImg').value;
+  if(!name || isNaN(price)) return alert("Valid name/price required");
+  products.push({ id: Date.now().toString(), name, price, category, img, reviews: [] });
   localStorage.setItem('bsmart_inventory', JSON.stringify(products));
-  
-  document.getElementById('newPName').value = '';
-  document.getElementById('newPPrice').value = '';
-  document.getElementById('newPImg').value = '';
-  renderProducts();
-  toggleModal('dashboardModal');
+  renderProducts(); renderAdminList(); toggleModal('dashboardModal');
+}
+
+function renderAdminList() {
+    document.getElementById('adminProductList').innerHTML = products.map(p => `
+        <div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid var(--border); font-size:0.8rem;">
+            <span>${p.name}</span><i class="fas fa-trash" onclick="deleteProduct('${p.id}')" style="color:var(--danger); cursor:pointer;"></i>
+        </div>`).join('');
+}
+
+function deleteProduct(id) {
+    if(confirm("Delete product?")) { products = products.filter(p => p.id !== id); localStorage.setItem('bsmart_inventory', JSON.stringify(products)); renderProducts(); renderAdminList(); }
+}
+
+function downloadCSV() {
+    let csv = "ID,Name,Price,Category\n" + products.map(p => `${p.id},${p.name},${p.price},${p.category}`).join("\n");
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'inventory.csv'; a.click();
 }
 
 function checkoutCart() {
   const total = document.getElementById('cartTotalText').innerText;
-  const items = cart.map(i => i.name).join(', ');
-  const msg = encodeURIComponent(`Hi BSmart! I want to order:\nItems: ${items}\nTotal: ${total}`);
-  window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
+  const list = cart.map(i => `${i.qty}x ${i.name}`).join('%0A');
+  window.open(`https://wa.me/${myNumber}?text=Order%20Details:%0A${list}%0A%0ATotal:%20${total}`, '_blank');
   cart = []; updateCartUI(); toggleModal('cartModal');
 }
 
 function showToast(msg) {
   const c = document.getElementById('notification-container');
-  const t = document.createElement('div');
-  t.className = 'toast'; t.innerText = msg;
-  c.appendChild(t);
-  setTimeout(() => t.remove(), 2500);
+  const t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
+  c.appendChild(t); setTimeout(() => t.remove(), 2500);
 }
-
-document.getElementById('newPImg').addEventListener('input', (e) => {
-  const preview = document.getElementById('imagePreview');
-  preview.innerHTML = `<img src="${e.target.value}" style="height:100%;" onerror="this.src='https://placehold.co/100?text=Invalid'">`;
-});
 
 function toggleModal(id) { const m = document.getElementById(id); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
 window.onload = renderProducts;
